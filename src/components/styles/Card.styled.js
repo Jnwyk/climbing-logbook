@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { Block } from "./Block.styled";
 
 export const Card = styled.div`
   position: relative;
@@ -11,5 +12,8 @@ export const Card = styled.div`
   transition: 0.4s;
   &:hover {
     border-color: #fca311;
+    ${Block} {
+      background-color: #fca311;
+    }
   }
 `;
