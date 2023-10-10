@@ -1,11 +1,9 @@
 import { Card } from "./styles/Card.styled";
 import Sign from "./Sign";
 
-const AddAscentCard = () => {
-  const addAscent = () => console.log("open add ascent modal");
-
+const AddAscentCard = ({ onClick }) => {
   return (
-    <Card onClick={addAscent}>
+    <Card onClick={onClick}>
       <Sign />
     </Card>
   );
