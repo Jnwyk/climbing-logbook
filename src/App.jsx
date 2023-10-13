@@ -11,6 +11,7 @@ function App() {
       <AddAscentCard onClick={() => setIsModalOpened(true)} />
       <Modal
         modalIsOpen={isModalOpened}
+        onChange={(e) => console.log(e.target.value)}
         closeModal={() => setIsModalOpened(false)}
       />
     </>
