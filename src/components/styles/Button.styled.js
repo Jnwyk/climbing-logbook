@@ -7,6 +7,7 @@ export const Button = styled.button`
   padding: 1rem;
   transition: 0.4s;
   border-radius: 0.3rem;
+  border: none;
   margin: 1rem;
   &:hover {
     background-color: #fca311;
