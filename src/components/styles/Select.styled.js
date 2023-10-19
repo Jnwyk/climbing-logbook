@@ -30,7 +30,6 @@ export const StyledSelect = styled(Select)`
 
   .Select__control--is-focused {
     border: none;
-    box-shadow: 6px 6px 16px rgba(252, 163, 17, 0.5);
     outline: none;
   }
 

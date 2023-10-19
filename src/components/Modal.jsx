@@ -37,7 +37,13 @@ const grades = [
   "VI.8",
 ];
 
-const Modal = ({ modalIsOpen, closeModal, onChange, submitForm }) => {
+const Modal = ({
+  modalIsOpen,
+  closeModal,
+  onChange,
+  submitForm,
+  isButtonDisabled,
+}) => {
   return (
     <ModalProvider>
       <ModalForm isOpen={modalIsOpen} onEscapeKeydown={closeModal}>
@@ -58,7 +64,9 @@ const Modal = ({ modalIsOpen, closeModal, onChange, submitForm }) => {
           onChange={(value) => onChange("style", value)}
         />
         <Picker array={grades} onChange={(value) => onChange("grade", value)} />
-        <Button onClick={submitForm}>SUMBIT</Button>
+        <Button onClick={submitForm} disabled={isButtonDisabled()}>
+          SUMBIT
+        </Button>
       </ModalForm>
     </ModalProvider>
   );

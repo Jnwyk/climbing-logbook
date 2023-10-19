@@ -36,6 +36,16 @@ function App() {
     dispatch({ type: "close_modal" });
   };
 
+  const isButtonDisabled = () => {
+    if (
+      state.newAscent.routeName === "" ||
+      state.newAscent.area === "" ||
+      state.newAscent.style === ""
+    )
+      return true;
+    return false;
+  };
+
   return (
     <>
       <AscentList
@@ -50,6 +60,7 @@ function App() {
         }
         closeModal={() => dispatch({ type: "close_modal" })}
         submitForm={submitForm}
+        isButtonDisabled={isButtonDisabled}
       />
     </>
   );
