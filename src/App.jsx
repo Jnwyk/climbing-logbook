@@ -9,22 +9,30 @@ function reducer(state, action) {
   } else if (action.type === "close_modal") {
     return { ...state, isModalOpened: false };
   } else if (action.type === "change_ascent") {
-    return { ...state, ascent: { ...state.ascent, ...action.object } };
+    return { ...state, newAscent: { ...state.newAscent, ...action.object } };
+  } else if (action.type === "add_ascent") {
+    return {
+      ...state,
+      ascentArray: action.newAscentArray,
+      newAscent: { routeName: "", area: "", style: "", grade: "III" },
+    };
   }
 }
 
-const ascentArray = [
-  { routeName: "test", area: "test", style: "test", grade: "VI" },
-];
-
 function App() {
   const [state, dispatch] = useReducer(reducer, {
-    ascent: { routeName: "", area: "", style: "", grade: "" },
+    newAscent: { routeName: "", area: "", style: "", grade: "III" },
     isModalOpened: false,
+    ascentArray: JSON.parse(localStorage.getItem("ascents")) || [],
   });
 
   const submitForm = () => {
-    console.log(state.ascent);
+    const ascentId = state.ascentArray.length;
+    const ascent = { id: ascentId, ...state.newAscent };
+    const ascentArray = JSON.parse(localStorage.getItem("ascents")) || [];
+    ascentArray.push(ascent);
+    localStorage.setItem("ascents", JSON.stringify(ascentArray));
+    dispatch({ type: "add_ascent", newAscentArray: ascentArray });
     dispatch({ type: "close_modal" });
   };
 
@@ -32,10 +40,10 @@ function App() {
     <>
       <AscentList
         addAscent={() => dispatch({ type: "open_modal" })}
-        ascentArray={ascentArray}
+        ascentArray={state.ascentArray}
       />
       <Modal
-        data={state.ascent}
+        data={state.newAscent}
         modalIsOpen={state.isModalOpened}
         onChange={(name, value) =>
           dispatch({ type: "change_ascent", object: { [name]: value } })

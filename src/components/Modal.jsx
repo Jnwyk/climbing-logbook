@@ -11,7 +11,31 @@ const styles = [
   { value: "redpoint", label: "Redpoint" },
 ];
 
-const grades = ["III", 'III+', "IV", "IV+", "V", "V+", "VI", "VI+", "VI.1", "VI.1+", "VI.2", "VI.2+", "VI.3", "VI.3+", "VI.4", "VI.4+"]
+const grades = [
+  "III",
+  "III+",
+  "IV",
+  "IV+",
+  "V",
+  "V+",
+  "VI",
+  "VI+",
+  "VI.1",
+  "VI.1+",
+  "VI.2",
+  "VI.2+",
+  "VI.3",
+  "VI.3+",
+  "VI.4",
+  "VI.4+",
+  "VI.5",
+  "VI.5+",
+  "VI.6",
+  "VI.6+",
+  "VI.7",
+  "VI.7+",
+  "VI.8",
+];
 
 const Modal = ({ modalIsOpen, closeModal, onChange, submitForm }) => {
   return (
@@ -27,7 +51,12 @@ const Modal = ({ modalIsOpen, closeModal, onChange, submitForm }) => {
           id="area"
           onChange={(e) => onChange(e.target.id, e.target.value)}
         />
-        <DropdownInput label="Style" id="style" options={styles} onChange={(value) => onChange("style", value)}/>
+        <DropdownInput
+          label="Style"
+          id="style"
+          options={styles}
+          onChange={(value) => onChange("style", value)}
+        />
         <Picker array={grades} onChange={(value) => onChange("grade", value)} />
         <Button onClick={submitForm}>SUMBIT</Button>
       </ModalForm>
