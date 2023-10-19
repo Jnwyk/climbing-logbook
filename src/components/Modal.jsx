@@ -13,23 +13,23 @@ const styles = [
 
 const grades = ["III", 'III+', "IV", "IV+", "V", "V+", "VI", "VI+", "VI.1", "VI.1+", "VI.2", "VI.2+", "VI.3", "VI.3+", "VI.4", "VI.4+"]
 
-const Modal = ({ modalIsOpen, closeModal, onChange }) => {
+const Modal = ({ modalIsOpen, closeModal, onChange, submitForm }) => {
   return (
     <ModalProvider>
       <ModalForm isOpen={modalIsOpen} onEscapeKeydown={closeModal}>
         <TextInput
           label="Route Name"
           id="routeName"
-          onChange={(e) => onChange(e)}
+          onChange={(e) => onChange(e.target.id, e.target.value)}
         />
         <TextInput
           label="Climbing Area"
           id="area"
-          onChange={(e) => onChange(e)}
+          onChange={(e) => onChange(e.target.id, e.target.value)}
         />
-        <DropdownInput label="Style" id="style" options={styles} />
-        <Picker array={grades} />
-        <Button onClick={closeModal}>SUMBIT</Button>
+        <DropdownInput label="Style" id="style" options={styles} onChange={(value) => onChange("style", value)}/>
+        <Picker array={grades} onChange={(value) => onChange("grade", value)} />
+        <Button onClick={submitForm}>SUMBIT</Button>
       </ModalForm>
     </ModalProvider>
   );

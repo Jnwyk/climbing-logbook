@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { StyledPicker } from "./styles/Picker.styled";
 
-const Picker = ({array}) => {
+const Picker = ({array, onChange}) => {
 
     const [currentPicked, setCurrentPicked] = useState(array[0]);
 
@@ -11,9 +11,11 @@ const Picker = ({array}) => {
         const index = array.indexOf(currentPicked);
         if(move === 'previous'){
             setCurrentPicked(array[index-1])
+            onChange(array[index-1])
         }
         if(move === 'next'){
             setCurrentPicked(array[index+1])
+            onChange(array[index+1])
         }
     }
 
