@@ -10,7 +10,7 @@ export const StyledSelect = styled(Select)`
   font-weight: 600;
   border-radius: 0.3rem;
   border: none;
-  box-shadow: 6px 6px 16px rgba(255, 255, 255, 0.2);
+  box-shadow: 6px 6px 16px rgba(0, 0, 0, 0.5);
   transition: 0.5s;
 
   .Select__control {

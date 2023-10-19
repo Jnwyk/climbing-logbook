@@ -3,7 +3,7 @@ import Sign from "./Sign";
 
 const AddAscentCard = ({ onClick }) => {
   return (
-    <Card onClick={onClick}>
+    <Card onClick={onClick} type="add">
       <Sign />
     </Card>
   );
