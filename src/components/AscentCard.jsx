@@ -10,18 +10,24 @@ import {
   Style,
   StyleMark,
 } from "./styles/AscentText.styled";
+import { TrashIcon } from "./styles/TrashIcon.styled";
 import { useState } from "react";
 
-const AscentCard = ({ routeName, area, grade, style }) => {
+const AscentCard = ({ id, routeName, area, grade, style, removeAscent }) => {
   const [isFront, setIsFront] = useState(true);
 
   const changeCardSide = (value) => {
     setIsFront(value);
   };
 
+  const removeCard = () => {
+    console.log("remove");
+  };
+
   return (
     <OuterAscentCard className={!isFront && "flip"}>
       <FrontAscentCard onClick={() => changeCardSide(false)}>
+        <TrashIcon onClick={() => removeAscent(id)} />
         <Area>{area}</Area>
         <RouteName>{routeName} </RouteName>
         <Grade>{grade}</Grade>

@@ -10,7 +10,7 @@ function reducer(state, action) {
     return { ...state, isModalOpened: false };
   } else if (action.type === "change_ascent") {
     return { ...state, newAscent: { ...state.newAscent, ...action.object } };
-  } else if (action.type === "add_ascent") {
+  } else if (action.type === "alter_ascents") {
     return {
       ...state,
       ascentArray: action.newAscentArray,
@@ -32,7 +32,7 @@ function App() {
     const ascentArray = JSON.parse(localStorage.getItem("ascents")) || [];
     ascentArray.push(ascent);
     localStorage.setItem("ascents", JSON.stringify(ascentArray));
-    dispatch({ type: "add_ascent", newAscentArray: ascentArray });
+    dispatch({ type: "alter_ascents", newAscentArray: ascentArray });
     dispatch({ type: "close_modal" });
   };
 
@@ -46,11 +46,20 @@ function App() {
     return false;
   };
 
+  const removeAscent = (id) => {
+    let ascentArray = JSON.parse(localStorage.getItem("ascents"));
+    const ascent = ascentArray.find((ascent) => ascent.id === id);
+    ascentArray = ascentArray.filter((element) => element !== ascent);
+    localStorage.setItem("ascents", JSON.stringify(ascentArray));
+    dispatch({ type: "alter_ascents", newAscentArray: ascentArray });
+  };
+
   return (
     <>
       <AscentList
         addAscent={() => dispatch({ type: "open_modal" })}
         ascentArray={state.ascentArray}
+        removeAscent={(id) => removeAscent(id)}
       />
       <Modal
         data={state.newAscent}

@@ -1,5 +1,13 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { Block } from "./Block.styled";
+
+const display = keyframes`
+from{
+  opacity: 0;
+}
+to{
+  opacity: 1;
+}`;
 
 export const Card = styled.div`
   position: relative;
@@ -15,7 +23,7 @@ export const Card = styled.div`
 
 export const StyledAddAscentCard = styled(Card)`
   border-style: dashed;
-
+  animation: ${display} 1s linear;
   &:hover {
     border-color: #fca311;
     ${Block} {
@@ -31,6 +39,7 @@ export const OuterAscentCard = styled(Card)`
   background-color: #e5e5e5;
   color: #14213d;
   transform-style: preserve-3d;
+  animation: ${display} 1s linear;
   &:hover {
     transform: translateY(-1%);
   }
