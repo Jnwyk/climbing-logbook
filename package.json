@@ -16,12 +16,14 @@
   "devDependencies": {
     "@types/express": "^5.0.5",
     "@types/node": "^24.10.1",
+    "@types/pg": "^8.15.6",
     "dotenv": "^17.2.3",
     "prisma": "^7.0.0",
     "tsc-watch": "^7.2.0",
     "typescript": "^5.9.3"
   },
   "dependencies": {
+    "@prisma/adapter-pg": "^7.0.0",
     "@prisma/client": "^7.0.0",
     "express": "^5.1.0",
     "pg": "^8.16.3"

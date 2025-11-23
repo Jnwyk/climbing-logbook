@@ -5,10 +5,108 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
+}
+
+model User{
+  id String @id @default(uuid())
+  username String @db.VarChar(50) @unique
+  password String
+  email String @unique
+  role Role @default(USER)
+  profile Profile?
+  ascents Ascent[]
+  CreatedOn DateTime @default(now())
+  UpdatedOn DateTime @updatedAt
+
+  @@map("users")
+}
+
+model Profile{
+  id String @id @default(uuid())
+  user User @relation(fields: [userId], references: [id])
+  userId String @unique
+  sex Sex?
+  age Int?
+  climbingStart DateTime?
+  personalBest String? @db.VarChar(5)
+  CreatedOn DateTime @default(now())
+  UpdatedOn DateTime @updatedAt
+
+  @@map("profiles")
+}
+
+model Route{
+  id String @id @default(uuid())
+  name String
+  crag Crag @relation(fields: [cragName, areaName, country], references: [name, areaName, country])
+  cragName String
+  areaName String
+  country String
+  grade String @db.VarChar(5)
+  climbingStyle String @db.VarChar(30)
+  ascents Ascent[]
+  CreatedOn DateTime @default(now())
+  UpdatedOn DateTime @updatedAt
+
+  @@map("routes")
+}
+
+model Ascent{
+  id String @id @default(uuid())
+  user User @relation(fields: [userId], references: [id])
+  userId String
+  route Route @relation(fields: [routeId], references: [id])
+  routeId String
+  ascentDate DateTime @default(now())
+  ascentStyle String
+  personalOpinion String
+  CreatedOn DateTime @default(now())
+  UpdatedOn DateTime @updatedAt
+
+  @@map("ascents")
+}
+
+model Crag{
+  name String
+  area Area @relation(fields: [areaName, country], references: [name, country])
+  areaName String
+  country String
+  minGrade String @db.VarChar(5)
+  maxGrade String @db.VarChar(5)
+  routes Route[]
+  CreatedOn DateTime @default(now())
+  UpdatedOn DateTime @updatedAt
+
+  @@id([name, areaName, country])
+  @@map("crags")
+}
+
+model Area{
+  name String
+  country String
+  rockMaterial String @db.VarChar(30)
+  minGrade String @db.VarChar(5)
+  maxGrade String @db.VarChar(5)
+  crags Crag[]
+  CreatedOn DateTime @default(now())
+  UpdatedOn DateTime @updatedAt
+
+  @@id([name, country])
+  @@map("areas")
+}
+
+enum Sex {
+  MALE
+  FEMALE
+}
+
+enum Role {
+  USER
+  ADMIN
 }
