@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction, Router } from "express";
+import { Prisma } from "../../generated";
 import Controller from "../../utils/interfaces/controller.interface";
 import prisma from "../../prismaClient";
 import HttpError from "../../utils/errors/HttpError";
@@ -13,10 +14,10 @@ class RouteController implements Controller {
 
   private initialiseRouteRoutes(): void {
     this.router.get(`${this.path}/:id`, this.getOne);
-    // this.router.get("/", this.getAll);
-    // this.router.post("/", this.create);
-    // this.router.put("/:id", this.update);
-    // this.router.delete("/:id", this.delete);
+    this.router.get(`${this.path}/`, this.getAll);
+    this.router.post(`${this.path}/`, this.create);
+    this.router.put(`${this.path}/:id`, this.update);
+    this.router.delete(`${this.path}/:id`, this.delete);
   }
 
   private getOne = async (
@@ -24,15 +25,143 @@ class RouteController implements Controller {
     res: Response,
     next: NextFunction
   ): Promise<Response | void> => {
-    console.log("Testing");
     const route = await prisma.route.findUnique({
       where: { id: req.params.id },
     });
     if (!route) {
       return next(new HttpError(404, "Route Not Found"));
     }
-    console.log("test");
-    res.status(200).json({ route: req.body });
+    res.status(200).json({ route: route });
+  };
+
+  private getAll = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void> => {
+    const routes = await prisma.route.findMany();
+    res.status(200).json({ routes: routes });
+  };
+
+  private create = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void> => {
+    const crag: Prisma.CragNameAreaNameCountryCompoundUniqueInput = {
+      name: req.body.cragName,
+      areaName: req.body.areaName,
+      country: req.body.country,
+    };
+
+    const area: Prisma.AreaNameCountryCompoundUniqueInput = {
+      name: req.body.areaName,
+      country: req.body.country,
+    };
+
+    const route: Prisma.RouteCreateInput = {
+      name: req.body.name,
+      grade: req.body.grade,
+      climbingStyle: req.body.climbingStyle,
+      crag: {
+        connectOrCreate: {
+          create: {
+            name: req.body.cragName,
+            minGrade: req.body.minGrade,
+            maxGrade: req.body.maxGrade,
+            area: {
+              connectOrCreate: {
+                create: {
+                  name: req.body.areaName,
+                  country: req.body.country,
+                  rockMaterial: req.body.rockMaterial,
+                  minGrade: req.body.minGrade,
+                  maxGrade: req.body.maxGrade,
+                },
+                where: {
+                  name_country: area,
+                },
+              },
+            },
+          },
+          where: {
+            name_areaName_country: crag,
+          },
+        },
+      },
+    };
+
+    const createdRoute = await prisma.route.create({ data: route });
+    res.status(201).json({ route: createdRoute });
+  };
+
+  private update = async (
+    req: Request<{ id: string }>,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void> => {
+    const crag: Prisma.CragNameAreaNameCountryCompoundUniqueInput = {
+      name: req.body.cragName,
+      areaName: req.body.areaName,
+      country: req.body.country,
+    };
+
+    const area: Prisma.AreaNameCountryCompoundUniqueInput = {
+      name: req.body.areaName,
+      country: req.body.country,
+    };
+
+    const route: Prisma.RouteUpdateInput = {
+      name: req.body.name,
+      grade: req.body.grade,
+      climbingStyle: req.body.climbingStyle,
+      crag: {
+        connectOrCreate: {
+          create: {
+            name: req.body.cragName,
+            minGrade: req.body.minGrade,
+            maxGrade: req.body.maxGrade,
+            area: {
+              connectOrCreate: {
+                create: {
+                  name: req.body.areaName,
+                  country: req.body.country,
+                  rockMaterial: req.body.rockMaterial,
+                  minGrade: req.body.minGrade,
+                  maxGrade: req.body.maxGrade,
+                },
+                where: {
+                  name_country: area,
+                },
+              },
+            },
+          },
+          where: {
+            name_areaName_country: crag,
+          },
+        },
+      },
+    };
+
+    const updatedRoute = await prisma.route.update({
+      where: { id: req.params.id },
+      data: route,
+    });
+    res.status(201).json({ route: updatedRoute });
+  };
+
+  private delete = async (
+    req: Request<{ id: string }>,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | void> => {
+    const route = await prisma.route.delete({
+      where: { id: req.params.id },
+    });
+    if (!route) {
+      return next(new HttpError(404, "Route Not Found"));
+    }
+    res.status(200).json({ route: route });
   };
 }
 
