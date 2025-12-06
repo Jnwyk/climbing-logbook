@@ -4,6 +4,7 @@ import Controller from "../../utils/interfaces/controller.interface";
 import prisma from "../../prismaClient";
 import HttpError from "../../utils/errors/HttpError";
 import validationMiddleware from "../../middleware/validation.middleware";
+import createRoute from "./route.validate";
 
 class RouteController implements Controller {
   public path = "/route";
@@ -15,9 +16,17 @@ class RouteController implements Controller {
 
   private initialiseRouteRoutes(): void {
     this.router.get(`${this.path}/:id`, this.getOne);
-    this.router.get(`${this.path}/`, this.getAll);
-    this.router.post(`${this.path}/`, validationMiddleware, this.create);
-    this.router.put(`${this.path}/:id`, this.update);
+    this.router.get(`${this.path}`, this.getAll);
+    this.router.post(
+      `${this.path}`,
+      validationMiddleware(createRoute),
+      this.create
+    );
+    this.router.put(
+      `${this.path}/:id`,
+      validationMiddleware(createRoute),
+      this.update
+    );
     this.router.delete(`${this.path}/:id`, this.delete);
   }
 
@@ -68,16 +77,16 @@ class RouteController implements Controller {
         connectOrCreate: {
           create: {
             name: req.body.cragName,
-            minGrade: req.body.minGrade,
-            maxGrade: req.body.maxGrade,
+            minGrade: req.body.minCragGrade,
+            maxGrade: req.body.maxCragGrade,
             area: {
               connectOrCreate: {
                 create: {
                   name: req.body.areaName,
                   country: req.body.country,
                   rockMaterial: req.body.rockMaterial,
-                  minGrade: req.body.minGrade,
-                  maxGrade: req.body.maxGrade,
+                  minGrade: req.body.minAreaGrade,
+                  maxGrade: req.body.maxAreaGrade,
                 },
                 where: {
                   name_country: area,
@@ -120,16 +129,16 @@ class RouteController implements Controller {
           connectOrCreate: {
             create: {
               name: req.body.cragName,
-              minGrade: req.body.minGrade,
-              maxGrade: req.body.maxGrade,
+              minGrade: req.body.minCragGrade,
+              maxGrade: req.body.maxCragGrade,
               area: {
                 connectOrCreate: {
                   create: {
                     name: req.body.areaName,
                     country: req.body.country,
                     rockMaterial: req.body.rockMaterial,
-                    minGrade: req.body.minGrade,
-                    maxGrade: req.body.maxGrade,
+                    minGrade: req.body.minAreaGrade,
+                    maxGrade: req.body.maxAreaGrade,
                   },
                   where: {
                     name_country: area,
