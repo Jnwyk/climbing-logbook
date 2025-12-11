@@ -19,12 +19,12 @@ class RouteController implements Controller {
     this.router.get(`${this.path}`, this.getAll);
     this.router.post(
       `${this.path}`,
-      validationMiddleware(createRoute),
+      validationMiddleware([createRoute]),
       this.create
     );
     this.router.put(
       `${this.path}/:id`,
-      validationMiddleware(createRoute),
+      validationMiddleware([createRoute]),
       this.update
     );
     this.router.delete(`${this.path}/:id`, this.delete);

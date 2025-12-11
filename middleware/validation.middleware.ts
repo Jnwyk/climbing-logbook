@@ -1,15 +1,19 @@
 import { Request, Response, NextFunction, RequestHandler } from "express";
-import { ZodType } from "zod";
+import { z, ZodType } from "zod";
 
-function validationMiddleware(schema: ZodType): RequestHandler {
+function validationMiddleware(schemas: ZodType<any>[]): RequestHandler {
   return async (
     req: Request,
     res: Response,
     next: NextFunction
   ): Promise<void> => {
     try {
-      const parsed = schema.parse(req.body);
-      req.body = parsed;
+      let merged = {};
+      schemas.forEach((schema) => {
+        const parsed = schema.parse(req.body);
+        merged = { ...merged, ...parsed };
+      });
+      req.body = merged;
       next();
     } catch (error) {
       next(error);

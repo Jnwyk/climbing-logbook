@@ -15,10 +15,14 @@ class AreaController implements Controller {
 
   private initialiseAreaRoutes() {
     this.router.get(this.path, this.getAll);
-    this.router.post(this.path, validationMiddleware(createArea), this.create);
+    this.router.post(
+      this.path,
+      validationMiddleware([createArea]),
+      this.create
+    );
     this.router.put(
       `${this.path}`,
-      validationMiddleware(createArea),
+      validationMiddleware([createArea]),
       this.update
     );
     this.router.delete(`${this.path}/:country/:area`, this.delete);
