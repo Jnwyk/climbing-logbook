@@ -3,6 +3,7 @@ import "dotenv/config";
 import RouteController from "./controllers/route/route.controller";
 import AreaController from "./controllers/area/area.controller";
 import CragController from "./controllers/crag/crag.controller";
+import UserController from "./controllers/user/user.controller";
 
 const port = Number(process.env.PORT);
 
@@ -10,6 +11,7 @@ const app = new App(port, [
   new RouteController(),
   new AreaController(),
   new CragController(),
+  new UserController(),
 ]);
 
 app.listen();

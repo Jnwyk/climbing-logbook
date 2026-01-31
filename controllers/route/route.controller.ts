@@ -5,6 +5,7 @@ import prisma from "../../prismaClient";
 import HttpError from "../../utils/errors/HttpError";
 import validationMiddleware from "../../middleware/validation.middleware";
 import createRoute from "./route.validate";
+import authMiddleware from "../../middleware/authentication.middleware";
 
 class RouteController implements Controller {
   public path = "/route";
@@ -15,17 +16,18 @@ class RouteController implements Controller {
   }
 
   private initialiseRouteRoutes(): void {
+    this.router.use(this.path, authMiddleware);
     this.router.get(`${this.path}/:id`, this.getOne);
     this.router.get(`${this.path}`, this.getAll);
     this.router.post(
       `${this.path}`,
       validationMiddleware([createRoute]),
-      this.create
+      this.create,
     );
     this.router.put(
       `${this.path}/:id`,
       validationMiddleware([createRoute]),
-      this.update
+      this.update,
     );
     this.router.delete(`${this.path}/:id`, this.delete);
   }
@@ -33,7 +35,7 @@ class RouteController implements Controller {
   private getOne = async (
     req: Request<{ id: string }>,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ): Promise<Response | void> => {
     const route = await prisma.route.findUnique({
       where: { id: req.params.id },
@@ -47,7 +49,7 @@ class RouteController implements Controller {
   private getAll = async (
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ): Promise<Response | void> => {
     const routes = await prisma.route.findMany();
     res.status(200).json({ routes: routes });
@@ -56,7 +58,7 @@ class RouteController implements Controller {
   private create = async (
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ): Promise<Response | void> => {
     const crag: Prisma.CragNameAreaNameCountryCompoundUniqueInput = {
       name: req.body.cragName,
@@ -108,7 +110,7 @@ class RouteController implements Controller {
   private update = async (
     req: Request<{ id: string }>,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ): Promise<Response | void> => {
     const crag: Prisma.CragNameAreaNameCountryCompoundUniqueInput = {
       name: req.body.cragName,
@@ -166,7 +168,7 @@ class RouteController implements Controller {
   private delete = async (
     req: Request<{ id: string }>,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ): Promise<Response | void> => {
     try {
       const route = await prisma.route.delete({

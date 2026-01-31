@@ -1,6 +1,7 @@
 import express, { Application } from "express";
 import Controller from "./utils/interfaces/controller.interface";
 import errorMiddleware from "./middleware/error.middleware";
+import authMiddleware from "./middleware/authentication.middleware";
 
 class App {
   public app: Application;

@@ -4,6 +4,7 @@ import { Prisma } from "../../generated";
 import prisma from "../../prismaClient";
 import validationMiddleware from "../../middleware/validation.middleware";
 import createArea from "./area.validate";
+import authMiddleware from "../../middleware/authentication.middleware";
 
 class AreaController implements Controller {
   public path = "/area";
@@ -14,16 +15,17 @@ class AreaController implements Controller {
   }
 
   private initialiseAreaRoutes() {
+    this.router.use(this.path, authMiddleware);
     this.router.get(this.path, this.getAll);
     this.router.post(
       this.path,
       validationMiddleware([createArea]),
-      this.create
+      this.create,
     );
     this.router.put(
       `${this.path}`,
       validationMiddleware([createArea]),
-      this.update
+      this.update,
     );
     this.router.delete(`${this.path}/:country/:area`, this.delete);
   }
@@ -31,7 +33,7 @@ class AreaController implements Controller {
   private getAll = async (
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ): Promise<Response | void> => {
     const areas = await prisma.area.findMany();
     res.status(200).json({ areas: areas });
@@ -52,7 +54,7 @@ class AreaController implements Controller {
   private update = async (
     req: Request<{ area: string; country: string }>,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) => {
     try {
       const areaId: Prisma.AreaNameCountryCompoundUniqueInput = {
@@ -79,7 +81,7 @@ class AreaController implements Controller {
   private delete = async (
     req: Request<{ area: string; country: string }>,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) => {
     try {
       const areaId: Prisma.AreaNameCountryCompoundUniqueInput = {

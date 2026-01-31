@@ -5,6 +5,7 @@ import prisma from "../../prismaClient";
 import validationMiddleware from "../../middleware/validation.middleware";
 import createCrag from "./crag.validate";
 import createArea from "../area/area.validate";
+import authMiddleware from "../../middleware/authentication.middleware";
 
 class CragController implements Controller {
   public path = "/crag";
@@ -15,16 +16,17 @@ class CragController implements Controller {
   }
 
   private initialiseCragRoutes() {
+    this.router.use(this.path, authMiddleware);
     this.router.get(this.path, this.getAll);
     this.router.post(
       this.path,
       validationMiddleware([createCrag, createArea]),
-      this.create
+      this.create,
     );
     this.router.put(
       `${this.path}/:country/:area/:crag`,
       validationMiddleware([createCrag, createArea]),
-      this.update
+      this.update,
     );
     this.router.delete(`${this.path}/:country/:area/:crag`, this.delete);
   }
@@ -32,7 +34,7 @@ class CragController implements Controller {
   private getAll = async (
     req: Request,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ): Promise<Response | void> => {
     const crags = await prisma.crag.findMany();
     res.status(200).json({ crags: crags });
@@ -69,7 +71,7 @@ class CragController implements Controller {
   private update = async (
     req: Request<{ crag: string; area: string; country: string }>,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) => {
     try {
       const areaId: Prisma.AreaNameCountryCompoundUniqueInput = {
@@ -113,7 +115,7 @@ class CragController implements Controller {
   private delete = async (
     req: Request<{ crag: string; area: string; country: string }>,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ) => {
     try {
       const cragId: Prisma.CragNameAreaNameCountryCompoundUniqueInput = {
