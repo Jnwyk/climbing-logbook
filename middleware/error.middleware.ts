@@ -7,7 +7,7 @@ function errorMiddleware(
   error: HttpError | ZodError | Prisma.PrismaClientKnownRequestError,
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): void {
   if (error instanceof HttpError) {
     const status = error.status || 500;
