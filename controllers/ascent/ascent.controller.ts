@@ -1,6 +1,6 @@
 import { Router, Request, Response, NextFunction } from "express";
 import Controller from "../../utils/interfaces/controller.interface";
-import { Prisma } from "../../generated";
+import { Prisma } from "@prisma/client";
 import prisma from "../../prismaClient";
 import validationMiddleware from "../../middleware/validation.middleware";
 import authMiddleware from "../../middleware/authentication.middleware";

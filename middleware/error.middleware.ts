@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import HttpError from "../utils/errors/HttpError";
 import { ZodError } from "zod";
-import { Prisma } from "../generated";
+import { Prisma } from "@prisma/client";
 
 function errorMiddleware(
   error: HttpError | ZodError | Prisma.PrismaClientKnownRequestError,

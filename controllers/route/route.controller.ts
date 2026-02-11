@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction, Router } from "express";
-import { Prisma } from "../../generated";
+import { Prisma } from "@prisma/client";
 import Controller from "../../utils/interfaces/controller.interface";
 import prisma from "../../prismaClient";
 import HttpError from "../../utils/errors/HttpError";

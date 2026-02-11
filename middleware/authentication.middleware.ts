@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { Prisma } from "../generated";
+import { Prisma } from "@prisma/client";
 import { Request, Response, NextFunction } from "express";
 import HttpError from "../utils/errors/HttpError";
 import Token from "../utils/interfaces/token.interface";
