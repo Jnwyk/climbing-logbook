@@ -1,12 +1,13 @@
 import { Router, Request, Response, NextFunction } from "express";
 import Controller from "../../utils/interfaces/controller.interface";
-import { Prisma } from "../../generated";
+import { Prisma } from "@prisma/client";
 import prisma from "../../prismaClient";
 import validationMiddleware from "../../middleware/validation.middleware";
 import HttpError from "../../utils/errors/HttpError";
 import generateToken from "../../utils/generateToken";
 import bcrypt from "bcrypt";
 import verifyPassword from "../../utils/verifyPassword";
+import { connect } from "http2";
 
 class UserController implements Controller {
   public path = "/user";
@@ -20,8 +21,6 @@ class UserController implements Controller {
     this.router.get(this.path, this.getAll);
     this.router.post(`${this.path}/register`, this.register);
     this.router.post(`${this.path}/login`, this.login);
-    // this.router.put(this.path, this.update);
-    // this.router.delete(this.path, this.delete);
   }
 
   private getAll = async (
@@ -80,28 +79,6 @@ class UserController implements Controller {
       next(error);
     }
   };
-
-  //   private update = async (
-  //     req: Request,
-  //     res: Response,
-  //     next: NextFunction
-  //   ) => {
-  //     try {
-  //     } catch (error) {
-  //       next(error);
-  //     }
-  //   };
-
-  //   private delete = async (
-  //     req: Request<{ area: string; country: string }>,
-  //     res: Response,
-  //     next: NextFunction
-  //   ) => {
-  //     try {
-  //     } catch (error) {
-  //       next(error);
-  //     }
-  //   };
 }
 
 export default UserController;
