@@ -1,14 +1,19 @@
+import type { NavigationItemInterface } from '../interfaces/NavigationItemInterface';
 import NavigationItem from './NavigationItem';
 
 interface NavigationBarInterface {
-  navigationItems: string[];
+  navigationItems: NavigationItemInterface[];
 }
 
 function NavigationBar({ navigationItems }: NavigationBarInterface) {
   return (
     <nav>
       {navigationItems.map((navigationItem) => (
-        <NavigationItem text={navigationItem} />
+        <NavigationItem
+          key={navigationItem.text}
+          text={navigationItem.text}
+          path={navigationItem.path}
+        />
       ))}
     </nav>
   );

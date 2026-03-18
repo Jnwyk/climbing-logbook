@@ -1,8 +1,12 @@
 import HeaderButton from './HeaderButton';
 import NavigationBar from './NavigationBar';
 import Logo from './Logo';
+import type { NavigationItemInterface } from '../interfaces/NavigationItemInterface';
 
-const HEADER_NAVIGATION = ['Logbook', 'Explore'];
+const HEADER_NAVIGATION: NavigationItemInterface[] = [
+  { text: 'Logbook', path: 'logbook' },
+  { text: 'Explore', path: 'explore' },
+];
 
 function Header() {
   return (

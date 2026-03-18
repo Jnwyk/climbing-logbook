@@ -1,12 +1,18 @@
+import { Link } from 'react-router';
+
 interface NavigationItemInterface {
   text: string;
+  path: string;
 }
 
-function NavigationItem({ text }: NavigationItemInterface) {
+function NavigationItem({ text, path }: NavigationItemInterface) {
   return (
-    <a className="text-sm font-medium text-stone-100 hover:text-primary transition-colors cursor-pointer px-4">
+    <Link
+      to={path}
+      className="text-sm font-medium text-stone-100 hover:text-primary transition-colors cursor-pointer px-4"
+    >
       {text}
-    </a>
+    </Link>
   );
 }
 
