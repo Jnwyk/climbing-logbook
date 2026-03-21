@@ -7,5 +7,9 @@
 @theme {
   --color-primary: #e89c30;
   --color-background: #1a1614;
-  --color-surface-dark: #26211e;
+  --color-card-dark: #26211e;
+  --color-card-light: #2f2a27;
+  --color-text-smokey: #80756b;
+  --color-text-light: #e5e1de;
+  --color-error: #93000a;
 }
