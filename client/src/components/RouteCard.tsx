@@ -8,7 +8,7 @@ interface RouteCardProps {
 
 function RouteCard({ route }: RouteCardProps) {
   return (
-    <div className="group bg-card-dark hover:bg-surface-dark/20 transition-all duration-300 p-5 flex flex-between md:flex-row md:items-center justify-between border border-outline-variant/30 hover:shadow-[0_12px_24px_-10px_rgba(0,0,0,0.3)] cursor-default">
+    <div className="group bg-card-dark hover:bg-card-dark transition-all duration-300 p-5 flex flex-between md:flex-row md:items-center justify-between border border-card-light hover:shadow-[0_12px_24px_-10px_rgba(0,0,0,0.3)] cursor-default">
       <RouteCardInfo route={route} />
       <div className="flex gap-1">
         <CardButton text="Edit" onClick={() => console.log('Edit')} />

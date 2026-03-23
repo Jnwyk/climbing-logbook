@@ -1,0 +1,27 @@
+interface SearchinputInterface {
+  label: string;
+  placeholder?: string;
+  disabled?: boolean;
+  onChange: () => void;
+}
+
+function SearchInput({
+  label,
+  placeholder,
+  disabled,
+  onChange,
+}: SearchinputInterface) {
+  return (
+    <label className="text-[10px] font-bold uppercase text-primary/80">
+      {label}
+      <input
+        className="w-full bg-background border border-card-dark focus:outline-0 focus:border-primary focus:text-text-light rounded-sm mt-2 py-2 px-2 font-light text-sm text-text-smokey"
+        placeholder={placeholder ?? ''}
+        disabled={disabled}
+        onChange={onChange}
+      />
+    </label>
+  );
+}
+
+export default SearchInput;

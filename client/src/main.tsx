@@ -4,15 +4,20 @@ import './index.css';
 import Layout from './components/Layout';
 import LogbookPage from './pages/LogbookPage';
 import ExplorePage from './pages/ExplorePage';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+const queryClient = new QueryClient();
 
 createRoot(document.getElementById('root')!).render(
-  <BrowserRouter>
-    <Routes>
-      <Route element={<Layout />}>
-        <Route path="/" element={<Navigate to="/logbook" replace />} />
-        <Route path="/logbook" element={<LogbookPage />} />
-        <Route path="/explore" element={<ExplorePage />} />
-      </Route>
-    </Routes>
-  </BrowserRouter>,
+  <QueryClientProvider client={queryClient}>
+    <BrowserRouter>
+      <Routes>
+        <Route element={<Layout />}>
+          <Route path="/" element={<Navigate to="/logbook" replace />} />
+          <Route path="/logbook" element={<LogbookPage />} />
+          <Route path="/explore" element={<ExplorePage />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  </QueryClientProvider>,
 );

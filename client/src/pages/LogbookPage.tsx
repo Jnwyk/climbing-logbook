@@ -1,13 +1,19 @@
-import RouteCard from '../components/RouteCard';
+import { useQuery } from '@tanstack/react-query';
+import { route } from './../api/routes';
+import { RouteCardList } from '../components/RouteCardList';
+import SearchCard from '../components/SearchCard';
 
 function LogbookPage() {
+  const { isPending, isError, data } = useQuery({
+    queryKey: ['routes'],
+    queryFn: route,
+  });
+
+  if (isPending) return <div>Loading</div>;
   return (
     <main className="flex flex-col gap-4 pt-16 px-8 mx-auto max-w-7xl w-full">
-      <RouteCard />
-      <RouteCard />
-      <RouteCard />
-      <RouteCard />
-      <RouteCard />
+      <SearchCard />
+      <RouteCardList routes={data?.routes} />
     </main>
   );
 }

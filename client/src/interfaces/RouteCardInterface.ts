@@ -1,7 +1,7 @@
 export interface RouteCardInterface {
   name: string;
-  crag: string;
-  area: string;
+  cragName: string;
+  areaName: string;
   country: string;
   grade: string;
 }
