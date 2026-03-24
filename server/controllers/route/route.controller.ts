@@ -16,7 +16,7 @@ class RouteController implements Controller {
   }
 
   private initialiseRouteRoutes(): void {
-    this.router.use(this.path, authMiddleware);
+    // this.router.use(this.path, authMiddleware);
     this.router.get(`${this.path}/:id`, this.getOne);
     this.router.get(`${this.path}`, this.getAll);
     this.router.post(
