@@ -79,16 +79,16 @@ class RouteController implements Controller {
         connectOrCreate: {
           create: {
             name: req.body.cragName,
-            minGrade: req.body.minCragGrade,
-            maxGrade: req.body.maxCragGrade,
+            minGrade: req.body.minCragGrade ?? "",
+            maxGrade: req.body.maxCragGrade ?? "",
             area: {
               connectOrCreate: {
                 create: {
                   name: req.body.areaName,
                   country: req.body.country,
-                  rockMaterial: req.body.rockMaterial,
-                  minGrade: req.body.minAreaGrade,
-                  maxGrade: req.body.maxAreaGrade,
+                  rockMaterial: req.body.rockMaterial ?? "",
+                  minGrade: req.body.minAreaGrade ?? "",
+                  maxGrade: req.body.maxAreaGrade ?? "",
                 },
                 where: {
                   name_country: area,
