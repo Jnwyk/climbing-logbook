@@ -9,6 +9,7 @@ function errorMiddleware(
   res: Response,
   next: NextFunction,
 ): void {
+  console.log(error);
   if (error instanceof HttpError) {
     const status = error.status || 500;
     const message = error.message || "Something went wrong";

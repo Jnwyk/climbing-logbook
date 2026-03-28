@@ -15,7 +15,7 @@ class AreaController implements Controller {
   }
 
   private initialiseAreaRoutes() {
-    this.router.use(this.path, authMiddleware);
+    // this.router.use(this.path, authMiddleware);
     this.router.get(this.path, this.getAll);
     this.router.post(
       this.path,

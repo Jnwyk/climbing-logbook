@@ -16,7 +16,7 @@ class CragController implements Controller {
   }
 
   private initialiseCragRoutes() {
-    this.router.use(this.path, authMiddleware);
+    // this.router.use(this.path, authMiddleware);
     this.router.get(this.path, this.getAll);
     this.router.post(
       this.path,
