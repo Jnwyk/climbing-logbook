@@ -1,13 +1,11 @@
 import { Router, Request, Response, NextFunction } from "express";
 import Controller from "../../utils/interfaces/controller.interface";
-import { Prisma } from "@prisma/client";
 import prisma from "../../prismaClient";
 import validationMiddleware from "../../middleware/validation.middleware";
 import HttpError from "../../utils/errors/HttpError";
 import generateToken from "../../utils/generateToken";
 import bcrypt from "bcrypt";
 import verifyPassword from "../../utils/verifyPassword";
-import { connect } from "http2";
 
 class UserController implements Controller {
   public path = "/user";

@@ -1,14 +1,14 @@
 import { Router, Request, Response, NextFunction } from "express";
 import Controller from "../../utils/interfaces/controller.interface";
-import { Prisma } from "@prisma/client";
-import prisma from "../../prismaClient";
 import validationMiddleware from "../../middleware/validation.middleware";
 import createArea from "./area.validate";
 import authMiddleware from "../../middleware/authentication.middleware";
+import AreaService from "./area.service";
 
 class AreaController implements Controller {
   public path = "/area";
   public router = Router();
+  public service = new AreaService();
 
   constructor() {
     this.initialiseAreaRoutes();
@@ -23,7 +23,7 @@ class AreaController implements Controller {
       this.create,
     );
     this.router.put(
-      `${this.path}`,
+      `${this.path}/:country/:area`,
       validationMiddleware([createArea]),
       this.update,
     );
@@ -35,19 +35,12 @@ class AreaController implements Controller {
     res: Response,
     next: NextFunction,
   ): Promise<Response | void> => {
-    const areas = await prisma.area.findMany();
+    const areas = await this.service.getAllAreas();
     res.status(200).json({ areas: areas });
   };
 
   private create = async (req: Request, res: Response, next: NextFunction) => {
-    const areaData: Prisma.AreaCreateInput = {
-      name: req.body.area,
-      country: req.body.country,
-      rockMaterial: req.body.rockMaterial,
-      minGrade: req.body.minGrade,
-      maxGrade: req.body.maxGrade,
-    };
-    const createdArea = await prisma.area.create({ data: areaData });
+    const createdArea = await this.service.createArea({ ...req.body });
     res.status(201).json({ area: createdArea });
   };
 
@@ -57,21 +50,10 @@ class AreaController implements Controller {
     next: NextFunction,
   ) => {
     try {
-      const areaId: Prisma.AreaNameCountryCompoundUniqueInput = {
-        name: req.params.area,
-        country: req.params.country,
-      };
-      const areaData: Prisma.AreaCreateInput = {
-        name: req.body.area,
-        country: req.body.country,
-        rockMaterial: req.body.rockMaterial,
-        minGrade: req.body.minGrade,
-        maxGrade: req.body.maxGrade,
-      };
-      const updatedArea = await prisma.area.update({
-        data: areaData,
-        where: { name_country: areaId },
-      });
+      const updatedArea = await this.service.updateArea(
+        { ...req.params },
+        { ...req.body },
+      );
       res.status(200).json({ area: updatedArea });
     } catch (error) {
       next(error);
@@ -84,13 +66,7 @@ class AreaController implements Controller {
     next: NextFunction,
   ) => {
     try {
-      const areaId: Prisma.AreaNameCountryCompoundUniqueInput = {
-        name: req.params.area,
-        country: req.params.country,
-      };
-      const deletedArea = await prisma.area.delete({
-        where: { name_country: areaId },
-      });
+      const deletedArea = await this.service.deleteArea({ ...req.params });
       res.status(200).json({ area: deletedArea });
     } catch (error) {
       next(error);

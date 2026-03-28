@@ -64,7 +64,7 @@ model Ascent{
   routeId String
   ascentDate DateTime @default(now())
   ascentStyle String
-  personalOpinion String
+  personalOpinion String?
   CreatedOn DateTime @default(now())
   UpdatedOn DateTime @updatedAt
 
@@ -76,8 +76,8 @@ model Crag{
   area Area @relation(fields: [areaName, country], references: [name, country])
   areaName String
   country String
-  minGrade String @db.VarChar(5)
-  maxGrade String @db.VarChar(5)
+  minGrade String? @db.VarChar(5)
+  maxGrade String? @db.VarChar(5)
   routes Route[]
   CreatedOn DateTime @default(now())
   UpdatedOn DateTime @updatedAt
@@ -90,8 +90,8 @@ model Area{
   name String
   country String
   rockMaterial String @db.VarChar(30)
-  minGrade String @db.VarChar(5)
-  maxGrade String @db.VarChar(5)
+  minGrade String? @db.VarChar(5)
+  maxGrade String? @db.VarChar(5)
   crags Crag[]
   CreatedOn DateTime @default(now())
   UpdatedOn DateTime @updatedAt
