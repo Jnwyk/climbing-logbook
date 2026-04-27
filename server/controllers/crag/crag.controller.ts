@@ -2,7 +2,6 @@ import { Router, Request, Response, NextFunction } from "express";
 import Controller from "../../utils/interfaces/controller.interface";
 import validationMiddleware from "../../middleware/validation.middleware";
 import createCrag from "./crag.validate";
-import createArea from "../area/area.validate";
 import authMiddleware from "../../middleware/authentication.middleware";
 import CragService from "./crag.service";
 
@@ -16,7 +15,7 @@ class CragController implements Controller {
   }
 
   private initialiseCragRoutes() {
-    // this.router.use(this.path, authMiddleware);
+    this.router.use(this.path, authMiddleware);
     this.router.get(this.path, this.getAll);
     this.router.post(
       this.path,

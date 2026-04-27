@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction, Router } from "express";
-import { Prisma } from "@prisma/client";
 import Controller from "../../utils/interfaces/controller.interface";
 import prisma from "../../prismaClient";
 import HttpError from "../../utils/errors/HttpError";
@@ -18,11 +17,19 @@ class RouteController implements Controller {
   }
 
   private initialiseRouteRoutes(): void {
-    // this.router.use(this.path, authMiddleware);
+    this.router.use(this.path, authMiddleware);
     this.router.get(`${this.path}/:id`, this.getOne);
     this.router.get(`${this.path}`, this.getAll);
-    this.router.post(`${this.path}`, this.create);
-    this.router.put(`${this.path}/:id`, this.update);
+    this.router.post(
+      `${this.path}`,
+      validationMiddleware([createRoute]),
+      this.create,
+    );
+    this.router.put(
+      `${this.path}/:id`,
+      validationMiddleware([createRoute]),
+      this.update,
+    );
     this.router.delete(`${this.path}/:id`, this.delete);
   }
 
@@ -54,8 +61,12 @@ class RouteController implements Controller {
     res: Response,
     next: NextFunction,
   ): Promise<Response | void> => {
-    const createdRoute = await this.service.createRoute({ ...req.body });
-    res.status(201).json({ route: createdRoute });
+    try {
+      const createdRoute = await this.service.createRoute({ ...req.body });
+      res.status(201).json({ route: createdRoute });
+    } catch (error) {
+      return next(error);
+    }
   };
 
   private update = async (
