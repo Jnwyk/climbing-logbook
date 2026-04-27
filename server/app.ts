@@ -1,7 +1,7 @@
 import express, { Application } from "express";
 import cors from "cors";
 import Controller from "./utils/interfaces/controller.interface";
-import errorMiddleware from "./middleware/error.middleware";
+import errorMiddleware from "./middleware/errors/error.middleware";
 import authMiddleware from "./middleware/authentication.middleware";
 
 class App {

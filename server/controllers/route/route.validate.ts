@@ -2,16 +2,16 @@ import * as z from "zod";
 
 const createRoute = z.object({
   name: z.string().nonempty(),
-  grade: z.string(),
-  climbingStyle: z.string(),
   cragName: z.string().nonempty(),
-  minCragGrade: z.string().max(5).optional(),
-  maxCragGrade: z.string().max(5).optional(),
-  minAreaGrade: z.string().max(5).optional(),
-  maxAreaGrade: z.string().max(5).optional(),
   areaName: z.string().nonempty(),
   country: z.string().nonempty(),
-  rockMaterial: z.string().max(30).optional(),
+  grade: z.string().nonempty(),
+  climbingStyle: z.string().nonempty(),
+  length: z.int().optional(),
+  year: z.date().optional(),
+  firstAscent: z.string().optional(),
+  boltNumber: z.int().optional(),
+  additionalInfo: z.string().optional(),
 });
 
 export default createRoute;
