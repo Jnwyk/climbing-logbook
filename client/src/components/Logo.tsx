@@ -1,6 +1,6 @@
 function Logo() {
   return (
-    <div className="flex flex-row items-end gap-1 cursor-default">
+    <div className="flex flex-row justify-center items-end gap-1 cursor-default">
       <svg
         fill="#e89c30"
         viewBox="0 0 32 32"
