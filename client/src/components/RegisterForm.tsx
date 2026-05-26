@@ -18,19 +18,29 @@ export function RegisterForm() {
   const mutation = useRegister();
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    if (mutation.isError) {
+      mutation.reset();
+    }
     const { name, value } = event.target;
     setRegisterForm((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmitForm = async () => {
     setRegisterForm(defaultRegisterForm);
-    const { user, token } = await mutation.mutateAsync(registerForm);
-    login({ username: user.username, token: token });
+    try {
+      const { user, token } = await mutation.mutateAsync(registerForm);
+      login({ username: user.username, token: token });
+    } catch {}
   };
 
   return (
     <form>
       <div className="grid grid-cols-2 gap-2">
+        {mutation.isError && (
+          <span className="col-span-2 block text-center text-error bg-amber-50 font-bold text-[12px] px-3 py-1.5 rounded border border-error/30">
+            Registration was not succesfull
+          </span>
+        )}
         <InputWithLabel
           label="Username"
           placeholder="JanKowalski"

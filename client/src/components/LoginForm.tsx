@@ -16,19 +16,29 @@ export function LoginForm() {
   const mutation = useLogin();
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    if (mutation.isError) {
+      mutation.reset();
+    }
     const { name, value } = event.target;
     setLoginForm((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmitForm = async () => {
     setLoginForm(defaultLoginForm);
-    const { user, token } = await mutation.mutateAsync(loginForm);
-    login({ username: user.username, token: token });
+    try {
+      const { user, token } = await mutation.mutateAsync(loginForm);
+      login({ username: user.username, token: token });
+    } catch {}
   };
 
   return (
     <form>
       <div className="grid grid-cols-2 gap-2">
+        {mutation.isError && (
+          <span className="col-span-2 block text-center text-error bg-amber-50 font-bold text-[12px] px-3 py-1.5 rounded border border-error/30">
+            Login was not succesfull
+          </span>
+        )}
         <InputWithLabel
           label="Email"
           placeholder="jan.kowalski@gmail.com"
