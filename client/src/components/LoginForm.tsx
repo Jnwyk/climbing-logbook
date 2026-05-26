@@ -1,30 +1,28 @@
 import { useContext, useState, type ChangeEvent } from 'react';
-import type { RegisterInterface } from '../interfaces/LoginRegisterInterface';
+import type { LoginInterface } from '../interfaces/LoginRegisterInterface';
 import InputWithLabel from './inputs/InputWithLabel';
 import SubmitButton from './SubmitButton';
-import { useRegister } from '../hooks/useRegister';
+import { useLogin } from '../hooks/useLogin';
 import { AuthContext } from '../context/AuthProvider';
 
-const defaultRegisterForm: RegisterInterface = {
-  username: '',
+const defaultLoginForm: LoginInterface = {
   email: '',
   password: '',
 };
 
-export function RegisterForm() {
+export function LoginForm() {
   const { login } = useContext(AuthContext);
-  const [registerForm, setRegisterForm] =
-    useState<RegisterInterface>(defaultRegisterForm);
-  const mutation = useRegister();
+  const [loginForm, setLoginForm] = useState<LoginInterface>(defaultLoginForm);
+  const mutation = useLogin();
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    setRegisterForm((prev) => ({ ...prev, [name]: value }));
+    setLoginForm((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmitForm = async () => {
-    setRegisterForm(defaultRegisterForm);
-    const { user, token } = await mutation.mutateAsync(registerForm);
+    setLoginForm(defaultLoginForm);
+    const { user, token } = await mutation.mutateAsync(loginForm);
     login({ username: user.username, token: token });
   };
 
@@ -32,16 +30,9 @@ export function RegisterForm() {
     <form>
       <div className="grid grid-cols-2 gap-2">
         <InputWithLabel
-          label="Username"
-          placeholder="JanKowalski"
-          value={registerForm.username}
-          className="col-span-2"
-          onChange={(event) => handleInputChange(event)}
-        />
-        <InputWithLabel
           label="Email"
           placeholder="jan.kowalski@gmail.com"
-          value={registerForm.email}
+          value={loginForm.email}
           className="col-span-2"
           onChange={(event) => handleInputChange(event)}
         />
@@ -49,7 +40,7 @@ export function RegisterForm() {
           type="password"
           label="Password"
           placeholder="*********"
-          value={registerForm.password}
+          value={loginForm.password}
           className="col-span-2"
           onChange={(event) => handleInputChange(event)}
         />
@@ -59,7 +50,7 @@ export function RegisterForm() {
           className="flex-2 py-3"
           submitForm={() => handleSubmitForm()}
         >
-          Register
+          Login
         </SubmitButton>
       </div>
     </form>

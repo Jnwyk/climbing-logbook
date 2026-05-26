@@ -26,10 +26,15 @@ export function AuthProvider({ children }: AuthProviderInterface) {
 
   const login = (data: LoggedUserInterface) => {
     setUser(data);
+    if (data.token && data.username) {
+      window.localStorage.setItem('token', data.token);
+      window.localStorage.setItem('username', data.username);
+    }
   };
 
   const logout = () => {
     setUser(null);
+    window.localStorage.clear();
   };
 
   return (

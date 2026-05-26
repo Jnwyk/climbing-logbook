@@ -16,7 +16,17 @@ createRoot(document.getElementById('root')!).render(
       <BrowserRouter>
         <Routes>
           <Route element={<Layout />}>
-            <Route path="/" element={<Navigate to="/home" replace />} />
+            <Route
+              path="/"
+              element={
+                <Navigate
+                  to={
+                    window.localStorage.getItem('token') ? '/logbook' : '/home'
+                  }
+                  replace
+                />
+              }
+            />
             <Route path="/home" element={<HomePage />} />
             <Route path="/logbook" element={<LogbookPage />} />
             <Route path="/explore" element={<ExplorePage />} />
