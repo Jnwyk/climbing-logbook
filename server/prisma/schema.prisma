@@ -47,18 +47,32 @@ model Route{
   cragName String
   areaName String
   country String
-  grade String @db.VarChar(5)
-  climbingStyle String @db.VarChar(30)
+  grade Grade @relation(fields: [gradeId], references: [id])
+  gradeId String
+  defaultFormat Format @relation(fields: [defaultFormatId], references: [id])
+  defaultFormatId String
   length Int?
   year DateTime?
   firstAscent String?
   boltNumber Int?
   additionalInfo String?
   ascents Ascent[]
+  routeHistory RouteHistory[]
   CreatedOn DateTime @default(now())
   UpdatedOn DateTime @updatedAt
 
   @@map("routes")
+}
+
+model RouteHistory{
+  id String @id @default(uuid())
+  route Route @relation(fields: [routeId], references: [id])
+  routeId String
+  changesJson Json
+  CreatedOn DateTime @default(now())
+  UpdatedOn DateTime @updatedAt
+
+  @@map("route_history")
 }
 
 model Ascent{
@@ -68,12 +82,63 @@ model Ascent{
   route Route @relation(fields: [routeId], references: [id])
   routeId String
   ascentDate DateTime @default(now())
-  ascentStyle String
+  style Style @relation(fields: [styleId], references: [id])
+  styleId String
+  format Format @relation(fields: [formatId], references: [id])
+  formatId String
+  myGrade Grade @relation(fields: [myGradeId], references: [id])
+  myGradeId String
   personalOpinion String?
+  stars Int
+  visibility Visibility @default(PUBLIC)
+  ascentHistory AscentHistory[]
   CreatedOn DateTime @default(now())
   UpdatedOn DateTime @updatedAt
 
   @@map("ascents")
+}
+
+model AscentHistory{
+  id String @id @default(uuid())
+  ascent Ascent @relation(fields: [ascentId], references: [id])
+  ascentId String
+  changesJson Json
+  CreatedOn DateTime @default(now())
+  UpdatedOn DateTime @updatedAt
+
+  @@map("ascent_history")
+}
+
+model Format{
+  id String @id @default(uuid())
+  format String
+  CreatedOn DateTime @default(now())
+  UpdatedOn DateTime @updatedAt
+  ascent Ascent[]
+  route Route[]
+
+  @@map("formats")
+}
+
+model Grade{
+  id String @id @default(uuid())
+  grade String
+  CreatedOn DateTime @default(now())
+  UpdatedOn DateTime @updatedAt
+  ascent Ascent[]
+  route Route[]
+
+  @@map("grades")
+}
+
+model Style{
+  id String @id @default(uuid())
+  style String
+  CreatedOn DateTime @default(now())
+  UpdatedOn DateTime @updatedAt
+  ascent Ascent[]
+
+  @@map("styles")
 }
 
 model Crag{
@@ -82,6 +147,8 @@ model Crag{
   areaName String
   country String
   routes Route[]
+  material Material @relation(fields: [materialId], references: [id])
+  materialId String
   CreatedOn DateTime @default(now())
   UpdatedOn DateTime @updatedAt
 
@@ -92,13 +159,22 @@ model Crag{
 model Area{
   name String
   country String
-  rockMaterial String? @db.VarChar(30)
   crags Crag[]
   CreatedOn DateTime @default(now())
   UpdatedOn DateTime @updatedAt
 
   @@id([name, country])
   @@map("areas")
+}
+
+model Material{
+  id String @id @default(uuid())
+  material String
+  crag Crag[]
+  CreatedOn DateTime @default(now())
+  UpdatedOn DateTime @updatedAt
+
+  @@map("materials")
 }
 
 enum Sex {
@@ -109,4 +185,9 @@ enum Sex {
 enum Role {
   USER
   ADMIN
+}
+
+enum Visibility {
+  PRIVATE
+  PUBLIC
 }
