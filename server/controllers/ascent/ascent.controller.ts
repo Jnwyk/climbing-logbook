@@ -40,22 +40,23 @@ class AscentController implements Controller {
   };
 
   private create = async (req: Request, res: Response, next: NextFunction) => {
-    const ascentData: Prisma.AscentCreateInput = {
-      ascentStyle: req.body.ascentStyle,
-      personalOpinion: req.body.personalOpinion,
-      user: {
-        connect: {
-          id: req.body.userId,
-        },
-      },
-      route: {
-        connect: {
-          id: req.body.routeId,
-        },
-      },
-    };
-    const createdAscent = await prisma.ascent.create({ data: ascentData });
-    res.status(201).json({ crag: createdAscent });
+    // const ascentData: Prisma.AscentCreateInput = {
+    //   ascentStyle: req.body.ascentStyle,
+    //   personalOpinion: req.body.personalOpinion,
+    //   user: {
+    //     connect: {
+    //       id: req.body.userId,
+    //     },
+    //   },
+    //   route: {
+    //     connect: {
+    //       id: req.body.routeId,
+    //     },
+    //   },
+    // };
+    // const createdAscent = await prisma.ascent.create({ data: ascentData });
+    // res.status(201).json({ crag: createdAscent });
+    res.status(201);
   };
 
   private update = async (
@@ -64,25 +65,30 @@ class AscentController implements Controller {
     next: NextFunction,
   ) => {
     try {
-      const ascentData: Prisma.AscentCreateInput = {
-        ascentStyle: req.body.ascentStyle,
-        personalOpinion: req.body.personalOpinion,
-        user: {
-          connect: {
-            id: req.body.userId,
-          },
-        },
-        route: {
-          connect: {
-            id: req.body.routeId,
-          },
-        },
-      };
-      const updatedArea = await prisma.ascent.update({
-        data: ascentData,
-        where: { id: req.params.ascentId },
-      });
-      res.status(200).json({ crag: updatedArea });
+      // const ascentData: Prisma.AscentCreateInput = {
+      //   format: {
+      //     connect: {
+      //       format: body.format,
+      //     },
+      //   },
+      //   personalOpinion: req.body.personalOpinion,
+      //   user: {
+      //     connect: {
+      //       id: req.body.userId,
+      //     },
+      //   },
+      //   route: {
+      //     connect: {
+      //       id: req.body.routeId,
+      //     },
+      //   },
+      // };
+      // const updatedArea = await prisma.ascent.update({
+      //   data: ascentData,
+      //   where: { id: req.params.ascentId },
+      // });
+      // res.status(200).json({ crag: updatedArea });
+      res.status(200);
     } catch (error) {
       next(error);
     }

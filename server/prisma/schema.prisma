@@ -111,7 +111,7 @@ model AscentHistory{
 
 model Format{
   id String @id @default(uuid())
-  format String
+  format String @unique
   CreatedOn DateTime @default(now())
   UpdatedOn DateTime @updatedAt
   ascent Ascent[]
@@ -122,7 +122,7 @@ model Format{
 
 model Grade{
   id String @id @default(uuid())
-  grade String
+  grade String @unique
   CreatedOn DateTime @default(now())
   UpdatedOn DateTime @updatedAt
   ascent Ascent[]
@@ -133,7 +133,7 @@ model Grade{
 
 model Style{
   id String @id @default(uuid())
-  style String
+  style String @unique
   CreatedOn DateTime @default(now())
   UpdatedOn DateTime @updatedAt
   ascent Ascent[]
@@ -169,7 +169,7 @@ model Area{
 
 model Material{
   id String @id @default(uuid())
-  material String
+  material String @unique
   crag Crag[]
   CreatedOn DateTime @default(now())
   UpdatedOn DateTime @updatedAt

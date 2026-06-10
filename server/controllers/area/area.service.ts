@@ -10,7 +10,6 @@ class AreaService {
     const areaData: Prisma.AreaCreateInput = {
       name: body.name,
       country: body.country,
-      rockMaterial: body.rockMaterial,
     };
     return await prisma.area.create({ data: areaData });
   };
@@ -26,7 +25,6 @@ class AreaService {
     const areaData: Prisma.AreaCreateInput = {
       name: body.name,
       country: body.country,
-      rockMaterial: body.rockMaterial,
     };
     return await prisma.area.update({
       data: areaData,

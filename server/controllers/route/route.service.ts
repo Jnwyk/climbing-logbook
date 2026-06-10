@@ -1,5 +1,7 @@
 import { Prisma } from "@prisma/client";
 import prisma from "../../prismaClient";
+import { connect } from "http2";
+import { format } from "path";
 
 class RouteService {
   public getAllRoutes = async () => {
@@ -23,8 +25,6 @@ class RouteService {
 
     const routeData: Prisma.RouteCreateInput = {
       name: body.name,
-      grade: body.grade,
-      climbingStyle: body.climbingStyle,
       length: body.length,
       year: body.year,
       firstAscent: body.firstAscent,
@@ -33,6 +33,16 @@ class RouteService {
       crag: {
         connect: {
           name_areaName_country: crag,
+        },
+      },
+      defaultFormat: {
+        connect: {
+          format: body.format,
+        },
+      },
+      grade: {
+        connect: {
+          grade: body.grade,
         },
       },
     };
@@ -46,11 +56,8 @@ class RouteService {
       areaName: body.areaName,
       country: body.country,
     };
-    console.log(body);
     const routeData: Prisma.RouteUpdateInput = {
       name: body.name,
-      grade: body.grade,
-      climbingStyle: body.climbingStyle,
       length: body.length,
       year: body.year,
       firstAscent: body.firstAscent,
@@ -59,6 +66,16 @@ class RouteService {
       crag: {
         connect: {
           name_areaName_country: cragId,
+        },
+      },
+      defaultFormat: {
+        connect: {
+          format: body.format,
+        },
+      },
+      grade: {
+        connect: {
+          grade: body.grade,
         },
       },
     };
