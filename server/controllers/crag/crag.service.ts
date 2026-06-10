@@ -16,6 +16,11 @@ class CragService {
       area: {
         connect: { name_country: areaId },
       },
+      material: {
+        connect: {
+          material: body.material,
+        },
+      },
     };
     return await prisma.crag.create({ data: cragData });
   };
@@ -38,6 +43,11 @@ class CragService {
       area: {
         connect: {
           name_country: areaId,
+        },
+      },
+      material: {
+        connect: {
+          material: body.material,
         },
       },
     };
