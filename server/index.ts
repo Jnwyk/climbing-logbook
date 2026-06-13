@@ -5,6 +5,7 @@ import AreaController from "./controllers/area/area.controller";
 import CragController from "./controllers/crag/crag.controller";
 import UserController from "./controllers/user/user.controller";
 import AscentController from "./controllers/ascent/ascent.controller";
+import AscentService from "./controllers/ascent/ascent.service";
 
 const port = Number(process.env.PORT);
 
@@ -13,7 +14,7 @@ const app = new App(port, [
   new AreaController(),
   new CragController(),
   new UserController(),
-  new AscentController(),
+  new AscentController(new AscentService()),
 ]);
 
 app.listen();
