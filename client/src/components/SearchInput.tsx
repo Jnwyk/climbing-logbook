@@ -21,7 +21,7 @@ function SearchInput({
     >
       {label}
       <input
-        className="w-full bg-background border border-card-dark focus:outline-0 focus:border-primary rounded-sm mt-2 py-2 px-2 font-light text-sm text-text-smokey"
+        className="w-full bg-card-light border border-card-dark focus:outline-0 focus:border-primary rounded-sm mt-2 py-2 px-2 font-light text-sm text-amber-50"
         placeholder={placeholder ?? ''}
         disabled={disabled}
         value={value}

@@ -47,7 +47,7 @@ export function DynamicInput({
         {label}
       </label>
       <input
-        className="w-full bg-background border border-card-dark focus:outline-0 focus:border-primary rounded-sm py-2 px-2 font-light text-sm text-text-smokey"
+        className="w-full bg-card-light border border-card-dark focus:outline-0 focus:border-primary rounded-sm py-2 px-2 font-light text-sm text-white"
         placeholder={placeholder}
         value={value}
         onChange={(e) => onChange(e.target.value)}
