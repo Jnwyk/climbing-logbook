@@ -20,3 +20,11 @@ export interface AscentTableInterface {
     grade: string;
   };
 }
+
+export interface FilterAscentsInterface {
+  route: string;
+  minGrade: string;
+  maxGrade: string;
+  format: string;
+  style: string;
+}

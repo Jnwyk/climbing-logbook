@@ -1,45 +1,98 @@
+import { useQueries } from '@tanstack/react-query';
 import { DynamicInput } from './DynamicInput';
 import PrimaryButton from './PrimaryButton';
 import SearchInput from './SearchInput';
+import { getGrades, getFormats, getStyles } from '../api/dictionaries';
+import { useState } from 'react';
+import type { FilterAscentsInterface } from '../interfaces/AscentsInterface';
 
-function AscentSearchCard() {
+interface AscentSearchCardProps {
+  submitSearch: (filters: FilterAscentsInterface) => void;
+  searchFilters: FilterAscentsInterface;
+}
+
+function AscentSearchCard({
+  submitSearch,
+  searchFilters,
+}: AscentSearchCardProps) {
+  const dictionaryData = useQueries({
+    queries: [
+      {
+        queryKey: ['grades'],
+        queryFn: () => getGrades(),
+      },
+      {
+        queryKey: ['formats'],
+        queryFn: () => getFormats(),
+      },
+      {
+        queryKey: ['styles'],
+        queryFn: () => getStyles(),
+      },
+    ],
+  });
+
+  const [filters, setFilters] = useState<FilterAscentsInterface>(searchFilters);
+
+  if (
+    dictionaryData[0].isLoading ||
+    dictionaryData[1].isLoading ||
+    dictionaryData[2].isLoading
+  ) {
+    return <div>loading</div>;
+  }
+
   return (
-    <div className="flex flex-col flex-1 p-4 shadow-[0_4px_12px_rgba(0,0,0,0.3)] shadow-black">
+    <div className="min-h-[80vh] flex flex-col flex-1 p-4 shadow-[0_4px_12px_rgba(0,0,0,0.3)] shadow-black">
       <SearchInput
         label="Route"
-        placeholder="Input Route..."
-        value=""
-        onChange={() => console.log('Change route')}
+        placeholder="input Route..."
+        value={filters.route}
+        onChange={(value) => setFilters((prev) => ({ ...prev, route: value }))}
       />
       <div className="flex gap-2">
         <DynamicInput
-          label="Grade"
+          label="Min Grade"
           placeholder="min grade"
-          value=""
-          onChange={() => console.log('Change min grade')}
+          data={dictionaryData[0].data.grades.map((grade: any) => grade.grade)}
+          value={filters.minGrade}
+          onChange={(value) =>
+            setFilters((prev) => ({ ...prev, minGrade: value }))
+          }
         />
         <DynamicInput
-          label="Grade"
+          label="Max Grade"
           placeholder="max grade"
-          value=""
-          onChange={() => console.log('Change max grade')}
+          data={dictionaryData[0].data.grades.map((grade: any) => grade.grade)}
+          value={filters.maxGrade}
+          onChange={(value) =>
+            setFilters((prev) => ({ ...prev, maxGrade: value }))
+          }
         />
       </div>
       <div className="flex gap-2">
         <DynamicInput
           label="Format"
           placeholder="format"
-          value=""
-          onChange={() => console.log('Change format')}
+          data={dictionaryData[1].data.formats.map(
+            (format: any) => format.format,
+          )}
+          value={filters.format}
+          onChange={(value) =>
+            setFilters((prev) => ({ ...prev, format: value }))
+          }
         />
         <DynamicInput
           label="Style"
           placeholder="style"
-          value=""
-          onChange={() => console.log('Change style')}
+          data={dictionaryData[2].data.styles.map((style: any) => style.style)}
+          value={filters.style}
+          onChange={(value) =>
+            setFilters((prev) => ({ ...prev, style: value }))
+          }
         />
       </div>
-      <PrimaryButton className="mt-4 " onClick={() => console.log('Search')}>
+      <PrimaryButton className="mt-4 " onClick={() => submitSearch(filters)}>
         Search
       </PrimaryButton>
     </div>
