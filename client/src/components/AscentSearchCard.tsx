@@ -43,7 +43,7 @@ function AscentSearchCard({
   }
 
   return (
-    <div className="min-h-[80vh] flex flex-col flex-1 p-4 shadow-[0_4px_12px_rgba(0,0,0,0.3)] shadow-black">
+    <div className="min-h-[70vh] flex flex-col flex-1 p-4 shadow-[0_4px_12px_rgba(0,0,0,0.3)] shadow-black">
       <SearchInput
         label="Route"
         placeholder="input Route..."

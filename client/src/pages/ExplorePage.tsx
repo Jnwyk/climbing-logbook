@@ -2,14 +2,17 @@ import { useQuery } from '@tanstack/react-query';
 import Table from '../components/tables/Table';
 import { ascents } from '../api/ascents';
 import AscentSearchCard from '../components/AscentSearchCard';
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import type {
   AscentTableInterface,
   FilterAscentsInterface,
 } from '../interfaces/AscentsInterface';
 import filterAscents from '../utils/filterAscents';
+import AddAscentModal from '../components/modals/AddAscentModal';
+import FlipButton from '../components/FlipButton';
 
 function ExplorePage() {
+  const modalRef = useRef<HTMLDialogElement>(null);
   const [activeFilters, setActiveFilters] = useState<FilterAscentsInterface>({
     route: '',
     minGrade: '',
@@ -38,10 +41,17 @@ function ExplorePage() {
         tableWidth={['30', '10', '10', '10', '15', '25']}
         tableData={filteredData}
       />
-      <AscentSearchCard
-        submitSearch={(filters) => setActiveFilters(filters)}
-        searchFilters={activeFilters}
-      />
+      <div className="flex flex-col gap-6">
+        <FlipButton
+          text="Add Ascent +"
+          onClick={() => modalRef.current?.showModal()}
+        />
+        <AscentSearchCard
+          submitSearch={(filters) => setActiveFilters(filters)}
+          searchFilters={activeFilters}
+        />
+      </div>
+      <AddAscentModal modalRef={modalRef} />
     </main>
   );
 }
