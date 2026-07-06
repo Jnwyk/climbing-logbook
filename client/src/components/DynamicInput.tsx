@@ -41,6 +41,11 @@ export function DynamicInput({
     [inputValue],
   );
 
+  const handleOnChange = (value: string) => {
+    setShowDropdown(false);
+    onChange(value);
+  };
+
   return (
     <div className="relative" ref={containerRef}>
       <label className="text-[10px] font-bold uppercase text-primary/80">
@@ -67,7 +72,7 @@ export function DynamicInput({
             <li
               key={element}
               className="py-2 pl-2 text-[12px] border-b border-card-light cursor-pointer last:border-b-0"
-              onClick={() => onChange(element)}
+              onClick={() => handleOnChange(element)}
             >
               {element}
             </li>
