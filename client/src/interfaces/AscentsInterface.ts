@@ -1,3 +1,9 @@
+import type {
+  FormatInterface,
+  GradeInterface,
+  StyleInterface,
+} from './DictionaryInterface';
+
 export type AscentVisibility = 'PUBLIC' | 'PRIVATE';
 
 export interface AscentTableInterface {
@@ -8,19 +14,11 @@ export interface AscentTableInterface {
     cragName: string;
     areaName: string;
     country: string;
-    grade: {
-      grade: string;
-    };
+    grade: GradeInterface;
   };
-  format: {
-    format: string;
-  };
-  style: {
-    style: string;
-  };
-  myGrade: {
-    grade: string;
-  };
+  format: FormatInterface;
+  style: StyleInterface;
+  myGrade: GradeInterface;
 }
 
 export interface FilterAscentsInterface {

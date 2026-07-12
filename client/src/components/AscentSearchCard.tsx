@@ -6,6 +6,11 @@ import { getGrades, getFormats, getStyles } from '../api/dictionaries';
 import { route } from '../api/routes';
 import { useState } from 'react';
 import type { FilterAscentsInterface } from '../interfaces/AscentsInterface';
+import type {
+  FormatInterface,
+  GradeInterface,
+  StyleInterface,
+} from '../interfaces/DictionaryInterface';
 
 interface AscentSearchCardProps {
   submitSearch: (filters: FilterAscentsInterface) => void;
@@ -59,7 +64,9 @@ function AscentSearchCard({
         <DynamicInput
           label="Min Grade"
           placeholder="min grade"
-          data={dictionaryData[0].data.grades.map((grade: any) => grade.grade)}
+          data={dictionaryData[0].data.grades.map(
+            (grade: GradeInterface) => grade.grade,
+          )}
           value={filters.minGrade}
           onChange={(value) =>
             setFilters((prev) => ({ ...prev, minGrade: value }))
@@ -68,7 +75,9 @@ function AscentSearchCard({
         <DynamicInput
           label="Max Grade"
           placeholder="max grade"
-          data={dictionaryData[0].data.grades.map((grade: any) => grade.grade)}
+          data={dictionaryData[0].data.grades.map(
+            (grade: GradeInterface) => grade.grade,
+          )}
           value={filters.maxGrade}
           onChange={(value) =>
             setFilters((prev) => ({ ...prev, maxGrade: value }))
@@ -80,7 +89,7 @@ function AscentSearchCard({
           label="Format"
           placeholder="format"
           data={dictionaryData[1].data.formats.map(
-            (format: any) => format.format,
+            (format: FormatInterface) => format.format,
           )}
           value={filters.format}
           onChange={(value) =>
@@ -90,7 +99,9 @@ function AscentSearchCard({
         <DynamicInput
           label="Style"
           placeholder="style"
-          data={dictionaryData[2].data.styles.map((style: any) => style.style)}
+          data={dictionaryData[2].data.styles.map(
+            (style: StyleInterface) => style.style,
+          )}
           value={filters.style}
           onChange={(value) =>
             setFilters((prev) => ({ ...prev, style: value }))

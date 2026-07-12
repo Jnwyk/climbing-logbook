@@ -11,6 +11,11 @@ import { route } from '../../api/routes';
 import PrimaryButton from '../PrimaryButton';
 import { createAscent } from '../../api/ascents';
 import type { CreateAscentInterface } from '../../interfaces/AscentsInterface';
+import type {
+  FormatInterface,
+  GradeInterface,
+  StyleInterface,
+} from '../../interfaces/DictionaryInterface';
 
 interface AddAscentModalProps {
   modalRef: React.Ref<HTMLDialogElement>;
@@ -99,13 +104,13 @@ export default function AddAscentModal({
         route.areaName === areaName.trim(),
     );
     const foundFormat = dictionaryData[1].data.formats.find(
-      (format: any) => newAscent.format === format.format,
+      (format: FormatInterface) => newAscent.format === format.format,
     );
     const foundStyle = dictionaryData[2].data.styles.find(
-      (style: any) => newAscent.style === style.style,
+      (style: StyleInterface) => newAscent.style === style.style,
     );
     const foundGrade = dictionaryData[0].data.grades.find(
-      (grade: any) => newAscent.grade === grade.grade,
+      (grade: GradeInterface) => newAscent.grade === grade.grade,
     );
     const mutationObject: CreateAscentInterface = {
       userId: '65a01fc2-49eb-47aa-9e53-36db0cc1646e',
@@ -136,7 +141,7 @@ export default function AddAscentModal({
         />
       </div>
       <div className="flex gap-2">
-        {dictionaryData[2].data.styles.map((style: any) => {
+        {dictionaryData[2].data.styles.map((style: StyleInterface) => {
           return (
             <StyleButton
               key={style.id}
@@ -154,7 +159,7 @@ export default function AddAscentModal({
         placeholder="format"
         value={newAscent.format}
         data={dictionaryData[1].data.formats.map(
-          (format: any) => format.format,
+          (format: FormatInterface) => format.format,
         )}
         onChange={(value) =>
           setNewAscent((prev) => ({ ...prev, format: value }))
@@ -164,7 +169,9 @@ export default function AddAscentModal({
         label="Grade"
         placeholder="grade"
         value={newAscent.grade}
-        data={dictionaryData[0].data.grades.map((grade: any) => grade.grade)}
+        data={dictionaryData[0].data.grades.map(
+          (grade: GradeInterface) => grade.grade,
+        )}
         onChange={(value) =>
           setNewAscent((prev) => ({ ...prev, grade: value }))
         }
