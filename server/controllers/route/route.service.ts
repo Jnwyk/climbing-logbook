@@ -7,6 +7,7 @@ class RouteService {
   public getAllRoutes = async () => {
     return await prisma.route.findMany({
       select: {
+        id: true,
         name: true,
         cragName: true,
         areaName: true,

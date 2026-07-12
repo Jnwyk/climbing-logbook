@@ -1,10 +1,25 @@
-function StarIcon({ color }: { color: string }) {
+function StarIcon({
+  color,
+  size = 20,
+  onMouseOver,
+  onMouseLeave,
+  onClick,
+}: {
+  color: string;
+  size?: number;
+  onMouseOver?: () => void;
+  onMouseLeave?: () => void;
+  onClick?: () => void;
+}) {
   return (
     <svg
+      onMouseOver={onMouseOver}
+      onMouseLeave={onMouseLeave}
+      onClick={onClick}
       fill={color}
       viewBox="0 0 32 32"
-      width={20}
-      height={20}
+      width={size}
+      height={size}
       version="1.1"
       xmlns="http://www.w3.org/2000/svg"
     >

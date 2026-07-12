@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect, useMemo } from 'react';
-import useDebounce from '../hooks/useDebounce';
+import useDebounce from '../../hooks/useDebounce';
+import CommonLabel from './CommonLabel';
 
 interface DynamicInputProps {
   label?: string;
@@ -48,9 +49,7 @@ export function DynamicInput({
 
   return (
     <div className="relative" ref={containerRef}>
-      <label className="text-[10px] font-bold uppercase text-primary/80">
-        {label}
-      </label>
+      {label && <CommonLabel label={label} />}
       <input
         className="w-full bg-card-light border border-card-dark focus:outline-0 focus:border-primary rounded-sm py-2 px-2 font-light text-sm text-white"
         placeholder={placeholder}

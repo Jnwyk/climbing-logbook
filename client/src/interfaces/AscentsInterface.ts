@@ -1,3 +1,5 @@
+export type AscentVisibility = 'PUBLIC' | 'PRIVATE';
+
 export interface AscentTableInterface {
   ascentDate: Date;
   stars: number;
@@ -27,4 +29,16 @@ export interface FilterAscentsInterface {
   maxGrade: string;
   format: string;
   style: string;
+}
+
+export interface CreateAscentInterface {
+  userId: string;
+  routeId: string;
+  ascentDate: string;
+  myGradeId: string;
+  formatId: string;
+  styleId: string;
+  stars: number;
+  visibility: string;
+  personalOpinion: string;
 }

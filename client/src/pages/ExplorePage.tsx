@@ -51,7 +51,10 @@ function ExplorePage() {
           searchFilters={activeFilters}
         />
       </div>
-      <AddAscentModal modalRef={modalRef} />
+      <AddAscentModal
+        modalRef={modalRef}
+        onClose={() => modalRef.current?.close()}
+      />
     </main>
   );
 }

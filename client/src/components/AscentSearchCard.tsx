@@ -1,8 +1,9 @@
 import { useQueries } from '@tanstack/react-query';
-import { DynamicInput } from './DynamicInput';
+import { DynamicInput } from './inputs/DynamicInput';
 import PrimaryButton from './PrimaryButton';
-import SearchInput from './SearchInput';
+import SearchInput from './inputs/SearchInput';
 import { getGrades, getFormats, getStyles } from '../api/dictionaries';
+import { route } from '../api/routes';
 import { useState } from 'react';
 import type { FilterAscentsInterface } from '../interfaces/AscentsInterface';
 
@@ -28,6 +29,10 @@ function AscentSearchCard({
       {
         queryKey: ['styles'],
         queryFn: () => getStyles(),
+      },
+      {
+        queryKey: ['routes'],
+        queryFn: () => route(),
       },
     ],
   });
