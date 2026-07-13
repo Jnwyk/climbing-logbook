@@ -7,7 +7,7 @@ interface StarRateInputProps {
 
 function StarRateInput({ rate, handleChange }: StarRateInputProps) {
   return (
-    <div className="flex relative left-[35 %] cursor-pointer">
+    <div className="flex w-full justify-center cursor-pointer">
       {Array.from({ length: 5 }, (_, i) => (
         <StarIcon
           key={i}

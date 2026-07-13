@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { useMutation, useQueries } from '@tanstack/react-query';
 import { getGrades, getFormats, getStyles } from '../../api/dictionaries';
 import Modal from './Modal';
@@ -16,13 +16,17 @@ import type {
   GradeInterface,
   StyleInterface,
 } from '../../interfaces/DictionaryInterface';
+import { AuthContext } from '../../context/AuthProvider';
+import DateInput from '../inputs/DateInput';
+import formatDateForInput from '../../utils/formatDateForInput';
+import CommonLabel from '../inputs/CommonLabel';
 
 interface AddAscentModalProps {
   modalRef: React.Ref<HTMLDialogElement>;
   onClose: () => void;
 }
 
-const defaultNewAscent = {
+const getDefaultNewAscent = () => ({
   route: '',
   private: false,
   format: '',
@@ -30,13 +34,15 @@ const defaultNewAscent = {
   style: 'Redpoint',
   rate: 1,
   note: '',
-};
+  ascentDate: formatDateForInput(new Date()),
+});
 
 export default function AddAscentModal({
   modalRef,
   onClose,
 }: AddAscentModalProps) {
-  const dictionaryData = useQueries({
+  const { user: user } = useContext(AuthContext);
+  const [gradesData, formatsData, stylesData, routesData] = useQueries({
     queries: [
       {
         queryKey: ['grades'],
@@ -60,20 +66,20 @@ export default function AddAscentModal({
     mutationKey: ['ascent'],
     mutationFn: (data: CreateAscentInterface) => createAscent(data),
   });
-  const [newAscent, setNewAscent] = useState(defaultNewAscent);
+  const [newAscent, setNewAscent] = useState(getDefaultNewAscent);
 
   if (
-    dictionaryData[0].isLoading ||
-    dictionaryData[1].isLoading ||
-    dictionaryData[2].isLoading ||
-    dictionaryData[3].isLoading
+    gradesData.isLoading ||
+    formatsData.isLoading ||
+    stylesData.isLoading ||
+    routesData.isLoading
   ) {
     return <div>loading</div>;
   }
 
   const handleChangeRoute = (value: string) => {
     const [routeName, cragName, areaName] = value.split(',');
-    const foundRoute = dictionaryData[3].data.routes.find(
+    const foundRoute = routesData.data.routes.find(
       (route: any) =>
         route.name === routeName.trim() &&
         route.cragName === cragName.trim() &&
@@ -91,31 +97,32 @@ export default function AddAscentModal({
   };
 
   const handleCloseModal = () => {
-    setNewAscent(defaultNewAscent);
+    setNewAscent(getDefaultNewAscent());
     onClose();
   };
 
   const handleSubmit = () => {
+    if (user?.id === null || user?.id === undefined) return;
     const [routeName, cragName, areaName] = newAscent.route.split(',');
-    const foundRoute = dictionaryData[3].data.routes.find(
+    const foundRoute = routesData.data.routes.find(
       (route: any) =>
         route.name === routeName.trim() &&
         route.cragName === cragName.trim() &&
         route.areaName === areaName.trim(),
     );
-    const foundFormat = dictionaryData[1].data.formats.find(
+    const foundFormat = formatsData.data.formats.find(
       (format: FormatInterface) => newAscent.format === format.format,
     );
-    const foundStyle = dictionaryData[2].data.styles.find(
+    const foundStyle = stylesData.data.styles.find(
       (style: StyleInterface) => newAscent.style === style.style,
     );
-    const foundGrade = dictionaryData[0].data.grades.find(
+    const foundGrade = gradesData.data.grades.find(
       (grade: GradeInterface) => newAscent.grade === grade.grade,
     );
     const mutationObject: CreateAscentInterface = {
-      userId: '65a01fc2-49eb-47aa-9e53-36db0cc1646e',
+      userId: user.id,
       routeId: foundRoute.id,
-      ascentDate: new Date().toISOString(),
+      ascentDate: new Date(`${newAscent.ascentDate}T00:00:00`).toISOString(),
       formatId: foundFormat.id,
       styleId: foundStyle.id,
       myGradeId: foundGrade.id,
@@ -128,82 +135,108 @@ export default function AddAscentModal({
   };
 
   return (
-    <Modal modalRef={modalRef} onClose={() => handleCloseModal()}>
-      <div className="grid grid-cols-2 gap-4">
+    <Modal
+      className="w-[min(90vw,32rem)]"
+      modalRef={modalRef}
+      onClose={() => handleCloseModal()}
+    >
+      <div className="grid gap-2">
         <DynamicInput
           label="Route"
           placeholder="input route..."
-          data={dictionaryData[3].data.routes.map((route: any) => {
+          data={routesData.data.routes.map((route: any) => {
             return route.name + ', ' + route.cragName + ', ' + route.areaName;
           })}
           value={newAscent.route}
           onChange={(value) => handleChangeRoute(value)}
         />
+        <div className="w-full gap-2">
+          <CommonLabel label="Style" />
+          <div className="flex w-full gap-2">
+            {stylesData.data.styles.map((style: StyleInterface) => {
+              return (
+                <StyleButton
+                  key={style.id}
+                  style={style.style}
+                  selected={newAscent.style}
+                  onClick={(style) =>
+                    setNewAscent((prev) => ({ ...prev, style: style }))
+                  }
+                />
+              );
+            })}
+          </div>
+        </div>
+        <div className="grid grid-cols-2 gap-2">
+          <DynamicInput
+            label="Format"
+            placeholder="format"
+            value={newAscent.format}
+            data={formatsData.data.formats.map(
+              (format: FormatInterface) => format.format,
+            )}
+            onChange={(value) =>
+              setNewAscent((prev) => ({ ...prev, format: value }))
+            }
+          />
+          <DynamicInput
+            label="Grade"
+            placeholder="grade"
+            value={newAscent.grade}
+            data={gradesData.data.grades.map(
+              (grade: GradeInterface) => grade.grade,
+            )}
+            onChange={(value) =>
+              setNewAscent((prev) => ({ ...prev, grade: value }))
+            }
+          />
+        </div>
+        <div className="grid grid-cols-2 items-end gap-2">
+          <DateInput
+            label="Ascent Date"
+            date={newAscent.ascentDate}
+            onChange={(date) =>
+              setNewAscent((prev) => ({ ...prev, ascentDate: date }))
+            }
+          />
+          <CheckboxInput
+            label="Set as private"
+            onChange={() =>
+              setNewAscent((prev) => ({ ...prev, private: !prev.private }))
+            }
+          />
+        </div>
+        <div>
+          <CommonLabel label="Rate" />
+          <StarRateInput
+            rate={newAscent.rate}
+            handleChange={(value) =>
+              setNewAscent((prev) => ({ ...prev, rate: value }))
+            }
+          />
+        </div>
+
+        <TextArea
+          label="notes"
+          note={newAscent.note}
+          onChange={(value) =>
+            setNewAscent((prev) => ({ ...prev, note: value }))
+          }
+        />
+        <div className="flex justify-end">
+          <PrimaryButton
+            disabled={
+              !newAscent.route &&
+              !newAscent.format &&
+              !newAscent.grade &&
+              !newAscent.style
+            }
+            onClick={() => handleSubmit()}
+          >
+            Submit
+          </PrimaryButton>
+        </div>
       </div>
-      <div className="flex gap-2">
-        {dictionaryData[2].data.styles.map((style: StyleInterface) => {
-          return (
-            <StyleButton
-              key={style.id}
-              style={style.style}
-              selected={newAscent.style}
-              onClick={(style) =>
-                setNewAscent((prev) => ({ ...prev, style: style }))
-              }
-            />
-          );
-        })}
-      </div>
-      <DynamicInput
-        label="Format"
-        placeholder="format"
-        value={newAscent.format}
-        data={dictionaryData[1].data.formats.map(
-          (format: FormatInterface) => format.format,
-        )}
-        onChange={(value) =>
-          setNewAscent((prev) => ({ ...prev, format: value }))
-        }
-      />
-      <DynamicInput
-        label="Grade"
-        placeholder="grade"
-        value={newAscent.grade}
-        data={dictionaryData[0].data.grades.map(
-          (grade: GradeInterface) => grade.grade,
-        )}
-        onChange={(value) =>
-          setNewAscent((prev) => ({ ...prev, grade: value }))
-        }
-      />
-      <CheckboxInput
-        label="Private"
-        onChange={() =>
-          setNewAscent((prev) => ({ ...prev, private: !prev.private }))
-        }
-      />
-      <StarRateInput
-        rate={newAscent.rate}
-        handleChange={(value) =>
-          setNewAscent((prev) => ({ ...prev, rate: value }))
-        }
-      />
-      <TextArea
-        label="notes"
-        note={newAscent.note}
-        onChange={(value) => setNewAscent((prev) => ({ ...prev, note: value }))}
-      />
-      <PrimaryButton
-        disabled={
-          !newAscent.route &&
-          !newAscent.format &&
-          !newAscent.grade &&
-          !newAscent.style
-        }
-        onClick={() => handleSubmit()}
-      >
-        Submit
-      </PrimaryButton>
     </Modal>
   );
 }
