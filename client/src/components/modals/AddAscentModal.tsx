@@ -20,6 +20,7 @@ import DateInput from '../inputs/DateInput';
 import formatDateForInput from '../../utils/formatDateForInput';
 import ModalTitle from './ModalTitle';
 import CommonLabel from '../inputs/CommonLabel';
+import CommonError from '../errors/CommonError';
 
 interface AddAscentModalProps {
   modalRef: React.Ref<HTMLDialogElement>;
@@ -65,6 +66,9 @@ export default function AddAscentModal({
   const mutation = useMutation({
     mutationKey: ['ascent'],
     mutationFn: (data: CreateAscentInterface) => createAscent(data),
+    onSuccess: () => {
+      handleCloseModal();
+    },
     onError: (error) => {
       setError(error.message);
     },
@@ -140,7 +144,6 @@ export default function AddAscentModal({
       personalOpinion: newAscent.note,
     };
     mutation.mutate(mutationObject);
-    handleCloseModal();
   };
 
   return (
@@ -149,13 +152,13 @@ export default function AddAscentModal({
       modalRef={modalRef}
       onClose={() => handleCloseModal()}
     >
-      {error && (
-        <span className="col-span-2 block text-center text-error bg-amber-50 font-bold text-[12px] px-3 py-1.5 rounded border border-error/30">
-          {error}
-        </span>
-      )}
       <div className="grid gap-2">
         <ModalTitle title="Add ascent" />
+        {error && (
+          <div>
+            <CommonError error={error} />
+          </div>
+        )}
         <DynamicInput
           label="Route"
           placeholder="input route..."
@@ -241,10 +244,10 @@ export default function AddAscentModal({
         <div className="flex justify-end">
           <PrimaryButton
             disabled={
-              !newAscent.route &&
-              !newAscent.format &&
-              !newAscent.grade &&
-              !newAscent.style &&
+              !newAscent.route ||
+              !newAscent.format ||
+              !newAscent.grade ||
+              !newAscent.style ||
               !newAscent.ascentDate
             }
             onClick={() => handleSubmit()}
