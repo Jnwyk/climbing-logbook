@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { useMutation, useQueries } from '@tanstack/react-query';
 import { getGrades, getFormats, getStyles } from '../../api/dictionaries';
 import Modal from './Modal';
@@ -16,9 +16,9 @@ import type {
   GradeInterface,
   StyleInterface,
 } from '../../interfaces/DictionaryInterface';
-import { AuthContext } from '../../context/AuthProvider';
 import DateInput from '../inputs/DateInput';
 import formatDateForInput from '../../utils/formatDateForInput';
+import ModalTitle from './ModalTitle';
 import CommonLabel from '../inputs/CommonLabel';
 
 interface AddAscentModalProps {
@@ -41,7 +41,7 @@ export default function AddAscentModal({
   modalRef,
   onClose,
 }: AddAscentModalProps) {
-  const { user: user } = useContext(AuthContext);
+  const [error, setError] = useState('');
   const [gradesData, formatsData, stylesData, routesData] = useQueries({
     queries: [
       {
@@ -65,6 +65,9 @@ export default function AddAscentModal({
   const mutation = useMutation({
     mutationKey: ['ascent'],
     mutationFn: (data: CreateAscentInterface) => createAscent(data),
+    onError: (error) => {
+      setError(error.message);
+    },
   });
   const [newAscent, setNewAscent] = useState(getDefaultNewAscent);
 
@@ -102,25 +105,31 @@ export default function AddAscentModal({
   };
 
   const handleSubmit = () => {
-    if (user?.id === null || user?.id === undefined) return;
+    const userId = window.localStorage.getItem('userId');
+
+    if (!userId) return;
     const [routeName, cragName, areaName] = newAscent.route.split(',');
-    const foundRoute = routesData.data.routes.find(
-      (route: any) =>
-        route.name === routeName.trim() &&
-        route.cragName === cragName.trim() &&
-        route.areaName === areaName.trim(),
-    );
-    const foundFormat = formatsData.data.formats.find(
-      (format: FormatInterface) => newAscent.format === format.format,
-    );
-    const foundStyle = stylesData.data.styles.find(
-      (style: StyleInterface) => newAscent.style === style.style,
-    );
-    const foundGrade = gradesData.data.grades.find(
-      (grade: GradeInterface) => newAscent.grade === grade.grade,
-    );
+    const foundRoute =
+      routesData.data.routes.find(
+        (route: any) =>
+          route.name === routeName.trim() &&
+          route.cragName === cragName.trim() &&
+          route.areaName === areaName.trim(),
+      ) || 0;
+    const foundFormat =
+      formatsData.data.formats.find(
+        (format: FormatInterface) => newAscent.format === format.format,
+      ) || 0;
+    const foundStyle =
+      stylesData.data.styles.find(
+        (style: StyleInterface) => newAscent.style === style.style,
+      ) || 0;
+    const foundGrade =
+      gradesData.data.grades.find(
+        (grade: GradeInterface) => newAscent.grade === grade.grade,
+      ) || 0;
     const mutationObject: CreateAscentInterface = {
-      userId: user.id,
+      userId,
       routeId: foundRoute.id,
       ascentDate: new Date(`${newAscent.ascentDate}T00:00:00`).toISOString(),
       formatId: foundFormat.id,
@@ -140,7 +149,13 @@ export default function AddAscentModal({
       modalRef={modalRef}
       onClose={() => handleCloseModal()}
     >
+      {error && (
+        <span className="col-span-2 block text-center text-error bg-amber-50 font-bold text-[12px] px-3 py-1.5 rounded border border-error/30">
+          {error}
+        </span>
+      )}
       <div className="grid gap-2">
+        <ModalTitle title="Add ascent" />
         <DynamicInput
           label="Route"
           placeholder="input route..."
@@ -229,7 +244,8 @@ export default function AddAscentModal({
               !newAscent.route &&
               !newAscent.format &&
               !newAscent.grade &&
-              !newAscent.style
+              !newAscent.style &&
+              !newAscent.ascentDate
             }
             onClick={() => handleSubmit()}
           >

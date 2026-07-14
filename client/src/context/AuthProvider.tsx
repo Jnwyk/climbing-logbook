@@ -27,9 +27,10 @@ export function AuthProvider({ children }: AuthProviderInterface) {
 
   const login = (data: LoggedUserInterface) => {
     setUser(data);
-    if (data.token && data.username) {
+    if (data.token && data.username && data.id) {
       window.localStorage.setItem('token', data.token);
       window.localStorage.setItem('username', data.username);
+      window.localStorage.setItem('userId', data.id);
     }
   };
 
