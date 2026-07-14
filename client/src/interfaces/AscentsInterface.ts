@@ -1,3 +1,11 @@
+import type {
+  FormatInterface,
+  GradeInterface,
+  StyleInterface,
+} from './DictionaryInterface';
+
+export type AscentVisibility = 'PUBLIC' | 'PRIVATE';
+
 export interface AscentTableInterface {
   ascentDate: Date;
   stars: number;
@@ -6,19 +14,11 @@ export interface AscentTableInterface {
     cragName: string;
     areaName: string;
     country: string;
-    grade: {
-      grade: string;
-    };
+    grade: GradeInterface;
   };
-  format: {
-    format: string;
-  };
-  style: {
-    style: string;
-  };
-  myGrade: {
-    grade: string;
-  };
+  format: FormatInterface;
+  style: StyleInterface;
+  myGrade: GradeInterface;
 }
 
 export interface FilterAscentsInterface {
@@ -27,4 +27,16 @@ export interface FilterAscentsInterface {
   maxGrade: string;
   format: string;
   style: string;
+}
+
+export interface CreateAscentInterface {
+  userId: string;
+  routeId: string;
+  ascentDate: string;
+  myGradeId: string;
+  formatId: string;
+  styleId: string;
+  stars: number;
+  visibility: string;
+  personalOpinion: string;
 }

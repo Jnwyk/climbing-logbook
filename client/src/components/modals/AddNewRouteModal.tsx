@@ -2,12 +2,12 @@ import type React from 'react';
 import { useState } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import Modal from './Modal';
-import SearchInput from '../SearchInput';
+import SearchInput from '../inputs/SearchInput';
 import PrimaryButton from '../PrimaryButton';
 import SecondaryButton from '../SecondaryButton';
 import type { CreateRouteInreface } from '../../interfaces/CreateRouteInterface';
 import { createRoute } from '../../api/routes';
-import { DynamicInput } from '../DynamicInput';
+import { DynamicInput } from '../inputs/DynamicInput';
 import { crags } from '../../api/crags';
 import { areas } from '../../api/areas';
 import type CragsInterface from '../../interfaces/CragsInterface';
@@ -78,12 +78,12 @@ export function AddNewRouteModal({
   return (
     <Modal modalRef={modalRef} onClose={closeForm}>
       <div className="grid grid-cols-2 gap-4">
-        <SearchInput
+        <DynamicInput
           label="Route name"
-          placeholder="e.g. Lewy Meningitis"
-          value={newRoute.name}
-          className="col-span-2"
-          onChange={(value) => changeRouteInput('name', value)}
+          placeholder="input route..."
+          data={cragData?.crags.map((crag: CragsInterface) => crag.name)}
+          value={`${newRoute.name}, ${newRoute.cragName}, ${newRoute.areaName}}`}
+          onChange={(value) => changeRouteInput('cragName', value)}
         />
         <DynamicInput
           label="Crag name"

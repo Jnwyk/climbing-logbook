@@ -4,7 +4,6 @@ import { Prisma } from "@prisma/client";
 export function getPrismaErrorMessage(
   err: Prisma.PrismaClientKnownRequestError,
 ) {
-  console.log("ERROR: ", err);
   switch (err.code) {
     // ---- Constraint violations ----
     case "P2002":

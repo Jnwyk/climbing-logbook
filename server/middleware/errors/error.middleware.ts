@@ -11,8 +11,14 @@ function errorMiddleware(
   res: Response,
   next: NextFunction,
 ): void {
-  zodErrorMiddleware(error, req, res, next);
-  prismaErrorMiddleware(error, req, res, next);
+  if (error instanceof ZodError) {
+    zodErrorMiddleware(error, req, res, next);
+    return;
+  }
+  if (error instanceof Prisma.PrismaClientKnownRequestError) {
+    prismaErrorMiddleware(error, req, res, next);
+    return;
+  }
 
   if (error instanceof HttpError) {
     const status = error.status || 500;

@@ -52,7 +52,7 @@ class AscentController implements Controller {
       const createdAscent = await this.ascentService.createAscent(req.body);
       res.status(201).json({ ascent: createdAscent });
     } catch (error) {
-      next();
+      next(error);
     }
   };
 

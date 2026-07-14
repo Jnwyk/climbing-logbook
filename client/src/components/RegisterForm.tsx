@@ -29,7 +29,7 @@ export function RegisterForm() {
     setRegisterForm(defaultRegisterForm);
     try {
       const { user, token } = await mutation.mutateAsync(registerForm);
-      login({ username: user.username, token: token });
+      login({ id: user.id, username: user.username, token });
     } catch {}
   };
 

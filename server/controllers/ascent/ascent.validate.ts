@@ -7,11 +7,11 @@ export const createAscent = z.object({
   styleId: z.string().nonempty(),
   formatId: z.string().nonempty(),
   myGradeId: z.string().nonempty(),
-  stars: z.int().gt(0).lt(6),
-  visibility: z.literal("PUBLIC", "PRIVATE"),
+  stars: z.number().int().gt(0).lt(6),
+  visibility: z.enum(["PUBLIC", "PRIVATE"]),
   personalOpinion: z.string().optional(),
 });
 
 export const updateVisibilityAscent = z.object({
-  visibility: z.literal(["PUBLIC", "PRIVATE"]),
+  visibility: z.enum(["PUBLIC", "PRIVATE"]),
 });

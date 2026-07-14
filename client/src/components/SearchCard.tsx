@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import PrimaryButton from './PrimaryButton';
-import SearchInput from './SearchInput';
+import SearchInput from './inputs/SearchInput';
 import type { RouteCardsFilterInterface } from '../interfaces/RouteCardsFilterInterface';
 
 interface SearchCardInterface {

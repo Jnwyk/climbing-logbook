@@ -13,7 +13,7 @@ function SecondaryButton({
 }: SecondaryButtonProps) {
   return (
     <button
-      className={`bg-card-dark text-center text-[#a8a29e] px-4 py-2 text-[10px] font-sm uppercase rounded-sm cursor-pointer ${className}`}
+      className={`text-center px-4 py-2 text-[10px] font-sm uppercase rounded-sm cursor-pointer focus:outline-none ${className}`}
       disabled={disabled}
       onClick={onClick}
     >

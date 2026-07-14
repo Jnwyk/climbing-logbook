@@ -37,6 +37,7 @@ class AscentService {
 
   public createAscent = async (body: CreateAscentInterface) => {
     const ascentData: Prisma.AscentCreateInput = {
+      ascentDate: body.ascentDate,
       stars: body.stars,
       visibility: body.visibility,
       personalOpinion: body.personalOpinion,

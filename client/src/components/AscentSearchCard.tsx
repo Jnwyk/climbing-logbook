@@ -1,10 +1,16 @@
 import { useQueries } from '@tanstack/react-query';
-import { DynamicInput } from './DynamicInput';
+import { DynamicInput } from './inputs/DynamicInput';
 import PrimaryButton from './PrimaryButton';
-import SearchInput from './SearchInput';
+import SearchInput from './inputs/SearchInput';
 import { getGrades, getFormats, getStyles } from '../api/dictionaries';
+import { route } from '../api/routes';
 import { useState } from 'react';
 import type { FilterAscentsInterface } from '../interfaces/AscentsInterface';
+import type {
+  FormatInterface,
+  GradeInterface,
+  StyleInterface,
+} from '../interfaces/DictionaryInterface';
 
 interface AscentSearchCardProps {
   submitSearch: (filters: FilterAscentsInterface) => void;
@@ -29,6 +35,10 @@ function AscentSearchCard({
         queryKey: ['styles'],
         queryFn: () => getStyles(),
       },
+      {
+        queryKey: ['routes'],
+        queryFn: () => route(),
+      },
     ],
   });
 
@@ -43,7 +53,7 @@ function AscentSearchCard({
   }
 
   return (
-    <div className="min-h-[80vh] flex flex-col flex-1 p-4 shadow-[0_4px_12px_rgba(0,0,0,0.3)] shadow-black">
+    <div className="min-h-[70vh] flex flex-col flex-1 p-4 shadow-[0_4px_12px_rgba(0,0,0,0.3)] shadow-black">
       <SearchInput
         label="Route"
         placeholder="input Route..."
@@ -54,7 +64,9 @@ function AscentSearchCard({
         <DynamicInput
           label="Min Grade"
           placeholder="min grade"
-          data={dictionaryData[0].data.grades.map((grade: any) => grade.grade)}
+          data={dictionaryData[0].data.grades.map(
+            (grade: GradeInterface) => grade.grade,
+          )}
           value={filters.minGrade}
           onChange={(value) =>
             setFilters((prev) => ({ ...prev, minGrade: value }))
@@ -63,7 +75,9 @@ function AscentSearchCard({
         <DynamicInput
           label="Max Grade"
           placeholder="max grade"
-          data={dictionaryData[0].data.grades.map((grade: any) => grade.grade)}
+          data={dictionaryData[0].data.grades.map(
+            (grade: GradeInterface) => grade.grade,
+          )}
           value={filters.maxGrade}
           onChange={(value) =>
             setFilters((prev) => ({ ...prev, maxGrade: value }))
@@ -75,7 +89,7 @@ function AscentSearchCard({
           label="Format"
           placeholder="format"
           data={dictionaryData[1].data.formats.map(
-            (format: any) => format.format,
+            (format: FormatInterface) => format.format,
           )}
           value={filters.format}
           onChange={(value) =>
@@ -85,7 +99,9 @@ function AscentSearchCard({
         <DynamicInput
           label="Style"
           placeholder="style"
-          data={dictionaryData[2].data.styles.map((style: any) => style.style)}
+          data={dictionaryData[2].data.styles.map(
+            (style: StyleInterface) => style.style,
+          )}
           value={filters.style}
           onChange={(value) =>
             setFilters((prev) => ({ ...prev, style: value }))

@@ -27,7 +27,7 @@ export function LoginForm() {
     setLoginForm(defaultLoginForm);
     try {
       const { user, token } = await mutation.mutateAsync(loginForm);
-      login({ username: user.username, token: token });
+      login({ id: user.id, username: user.username, token });
     } catch {}
   };
 
