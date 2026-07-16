@@ -1,5 +1,9 @@
 import { useState } from 'react';
-import { useMutation, useQueries } from '@tanstack/react-query';
+import {
+  useMutation,
+  useQueries,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { getGrades, getFormats, getStyles } from '../../api/dictionaries';
 import Modal from './Modal';
 import { DynamicInput } from '../inputs/DynamicInput';
@@ -44,6 +48,7 @@ export default function AddAscentModal({
   onClose,
 }: AddAscentModalProps) {
   const [error, setError] = useState('');
+  const queryClient = useQueryClient();
   const [gradesData, formatsData, stylesData, routesData] = useQueries({
     queries: [
       {
@@ -67,7 +72,8 @@ export default function AddAscentModal({
   const mutation = useMutation({
     mutationKey: ['ascent'],
     mutationFn: (data: CreateAscentInterface) => createAscent(data),
-    onSuccess: () => {
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['ascents'] });
       handleCloseModal();
     },
     onError: (error) => {
