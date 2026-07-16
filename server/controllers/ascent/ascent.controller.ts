@@ -1,7 +1,5 @@
 import { Router, Request, Response, NextFunction } from "express";
 import Controller from "../../utils/interfaces/controller.interface";
-import { Prisma } from "@prisma/client";
-import prisma from "../../prismaClient";
 import validationMiddleware from "../../middleware/validation.middleware";
 import authMiddleware from "../../middleware/authentication.middleware";
 import { createAscent, updateVisibilityAscent } from "./ascent.validate";
@@ -19,7 +17,7 @@ class AscentController implements Controller {
 
   private initialiseCragRoutes() {
     this.router.use(this.path, authMiddleware);
-    this.router.get(this.path, this.getAll);
+    this.router.get(`${this.path}/:id`, this.getAll);
     this.router.post(
       this.path,
       validationMiddleware([createAscent]),
@@ -39,11 +37,13 @@ class AscentController implements Controller {
   }
 
   private getAll = async (
-    req: Request,
+    req: Request<{ id: string }>,
     res: Response,
     next: NextFunction,
   ): Promise<Response | void> => {
-    const ascents = await this.ascentService.getAllAscents();
+    const ascents = await this.ascentService.getAllAscents({
+      id: req.params.id,
+    });
     res.status(200).json({ ascents: ascents });
   };
 

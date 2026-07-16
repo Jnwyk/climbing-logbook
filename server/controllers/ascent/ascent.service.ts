@@ -6,7 +6,7 @@ import {
 } from "../../types/ascents.types";
 
 class AscentService {
-  public getAllAscents = async () => {
+  public getAllAscents = async (params: { id: string }) => {
     return await prisma.ascent.findMany({
       select: {
         ascentDate: true,
@@ -32,6 +32,7 @@ class AscentService {
           select: { grade: true },
         },
       },
+      where: { userId: params.id },
     });
   };
 
