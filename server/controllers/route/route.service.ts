@@ -1,7 +1,5 @@
 import { Prisma } from "@prisma/client";
 import prisma from "../../prismaClient";
-import { connect } from "http2";
-import { format } from "path";
 
 class RouteService {
   public getAllRoutes = async () => {
@@ -12,7 +10,44 @@ class RouteService {
         cragName: true,
         areaName: true,
         country: true,
-        grade: true,
+        grade: {
+          select: {
+            grade: true,
+          },
+        },
+        defaultFormat: {
+          select: {
+            format: true,
+          },
+        },
+      },
+    });
+  };
+
+  public getRoute = async (params: { id: string }) => {
+    return await prisma.route.findUnique({
+      where: { id: params.id },
+      select: {
+        id: true,
+        name: true,
+        cragName: true,
+        areaName: true,
+        country: true,
+        grade: {
+          select: {
+            grade: true,
+          },
+        },
+        defaultFormat: {
+          select: {
+            format: true,
+          },
+        },
+        length: true,
+        year: true,
+        firstAscent: true,
+        boltNumber: true,
+        additionalInfo: true,
       },
     });
   };

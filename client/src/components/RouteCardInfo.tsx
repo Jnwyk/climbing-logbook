@@ -1,15 +1,15 @@
 import locationIcon from './../assets/location.svg';
-import type { RouteCardInterface } from '../interfaces/RouteCardInterface';
+import type { RouteGeneralInformationInterface } from '../interfaces/RoutesInterface';
 
 interface RouteCardInfoProps {
-  route: RouteCardInterface;
+  route: RouteGeneralInformationInterface;
 }
 
 export function RouteCardInfo({ route }: RouteCardInfoProps) {
   return (
     <div className="flex items-center gap-6">
       <div className="bg-stone-900 w-16 h-16 flex items-center justify-center border border-primary/20 text-xl font-semi-bold text-primary">
-        {route.grade}
+        {route.grade.grade}
       </div>
       <div>
         <h2 className="text-[1.25rem] text-text-light font-semibold">

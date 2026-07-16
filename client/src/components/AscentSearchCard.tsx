@@ -1,6 +1,6 @@
 import { useQueries } from '@tanstack/react-query';
 import { DynamicInput } from './inputs/DynamicInput';
-import PrimaryButton from './PrimaryButton';
+import PrimaryButton from './buttons/PrimaryButton';
 import SearchInput from './inputs/SearchInput';
 import { getGrades, getFormats, getStyles } from '../api/dictionaries';
 import { route } from '../api/routes';

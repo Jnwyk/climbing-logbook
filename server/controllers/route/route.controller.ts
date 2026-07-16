@@ -38,9 +38,7 @@ class RouteController implements Controller {
     res: Response,
     next: NextFunction,
   ): Promise<Response | void> => {
-    const route = await prisma.route.findUnique({
-      where: { id: req.params.id },
-    });
+    const route = await this.service.getRoute({ id: req.params.id });
     if (!route) {
       return next(new HttpError(404, "Record Not Found"));
     }

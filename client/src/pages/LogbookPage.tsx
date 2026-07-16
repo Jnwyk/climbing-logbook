@@ -1,45 +1,60 @@
-import { useState, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { route } from './../api/routes';
-import { RouteCardList } from '../components/RouteCardList';
-import SearchCard from '../components/SearchCard';
-import PrimaryButton from '../components/PrimaryButton';
-import { AddNewRouteModal } from '../components/modals/AddNewRouteModal';
-import type { RouteCardsFilterInterface } from '../interfaces/RouteCardsFilterInterface';
-import filterRoutes from '../utils/filterRoutes';
+import Table from '../components/tables/Table';
+import { ascents } from '../api/ascents';
+import AscentSearchCard from '../components/AscentSearchCard';
+import { useMemo, useRef, useState } from 'react';
+import type {
+  AscentTableInterface,
+  FilterAscentsInterface,
+} from '../interfaces/AscentsInterface';
+import filterAscents from '../utils/filterAscents';
+import AddAscentModal from '../components/modals/AddAscentModal';
+import FlipButton from '../components/buttons/FlipButton';
 
 function LogbookPage() {
   const modalRef = useRef<HTMLDialogElement>(null);
-  const [filters, setFilters] = useState<RouteCardsFilterInterface>({
-    routeName: '',
-    cragAreaName: '',
-    country: '',
-  });
-  const { isPending, isError, data } = useQuery({
-    queryKey: ['routes'],
-    queryFn: route,
-    select: (data) => filterRoutes(data, filters),
+  const [activeFilters, setActiveFilters] = useState<FilterAscentsInterface>({
+    route: '',
+    minGrade: '',
+    maxGrade: '',
+    format: '',
+    style: '',
   });
 
-  if (isPending) return <div>Loading</div>;
-  if (isError) return <div>Error</div>;
+  const { isPending, isError, data } = useQuery({
+    queryKey: ['ascents'],
+    queryFn: ascents,
+  });
+
+  const filteredData = useMemo(() => {
+    if (!data) return null;
+    return data.ascents.filter((element: AscentTableInterface) => {
+      return filterAscents(element, activeFilters);
+    });
+  }, [data, activeFilters]);
+
+  if (isPending) return <p>Loading</p>;
+  if (isError) navigation.navigate('/home');
   return (
-    <main className="relative mx-auto max-w-7xl w-full">
-      <div className="relative flex justify-end px-8 pt-8">
-        <PrimaryButton onClick={() => modalRef.current?.showModal()}>
-          + Add Route
-        </PrimaryButton>
-      </div>
-      <div className="flex flex-col gap-4 pt-8 px-8 ">
-        <SearchCard
-          filters={filters}
-          onSearchClick={(filters) => setFilters(filters)}
+    <main className="p-6 pt-8 flex items-start gap-6">
+      <Table
+        headers={['Crag', 'Grade', 'Format', 'Style', 'Ascent Date', 'Rating']}
+        tableWidth={['30', '10', '10', '10', '15', '25']}
+        tableData={filteredData}
+      />
+      <div className="flex flex-col gap-6">
+        <FlipButton
+          text="Add Ascent +"
+          onClick={() => modalRef.current?.showModal()}
         />
-        <RouteCardList routes={data?.routes} />
+        <AscentSearchCard
+          submitSearch={(filters) => setActiveFilters(filters)}
+          searchFilters={activeFilters}
+        />
       </div>
-      <AddNewRouteModal
+      <AddAscentModal
         modalRef={modalRef}
-        closeModal={() => modalRef.current?.close()}
+        onClose={() => modalRef.current?.close()}
       />
     </main>
   );

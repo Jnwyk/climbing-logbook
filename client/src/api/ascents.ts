@@ -2,9 +2,10 @@ import type { CreateAscentInterface } from '../interfaces/AscentsInterface';
 import { handleResponse } from './handleResponse';
 
 const token: string | null = window.localStorage.getItem('token');
+const userId: string | null = window.localStorage.getItem('userId');
 
 export const ascents = async () => {
-  const response = await fetch('http://localhost:8000/ascent', {
+  const response = await fetch(`http://localhost:8000/ascent/${userId}`, {
     headers: { Authorization: `Bearer ${token}` },
   });
   return await handleResponse(response);
