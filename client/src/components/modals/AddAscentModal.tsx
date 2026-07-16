@@ -21,6 +21,7 @@ import formatDateForInput from '../../utils/formatDateForInput';
 import ModalTitle from './ModalTitle';
 import CommonLabel from '../inputs/CommonLabel';
 import CommonError from '../errors/CommonError';
+import type { RouteGeneralInformationInterface } from '../../interfaces/RoutesInterface';
 
 interface AddAscentModalProps {
   modalRef: React.Ref<HTMLDialogElement>;
@@ -84,10 +85,12 @@ export default function AddAscentModal({
     return <div>loading</div>;
   }
 
+  const routes = routesData.data?.routes ?? [];
+
   const handleChangeRoute = (value: string) => {
     const [routeName, cragName, areaName] = value.split(',');
-    const foundRoute = routesData.data.routes.find(
-      (route: any) =>
+    const foundRoute = routes.find(
+      (route: RouteGeneralInformationInterface) =>
         route.name === routeName.trim() &&
         route.cragName === cragName.trim() &&
         route.areaName === areaName.trim(),
@@ -113,13 +116,12 @@ export default function AddAscentModal({
 
     if (!userId) return;
     const [routeName, cragName, areaName] = newAscent.route.split(',');
-    const foundRoute =
-      routesData.data.routes.find(
-        (route: any) =>
-          route.name === routeName.trim() &&
-          route.cragName === cragName.trim() &&
-          route.areaName === areaName.trim(),
-      ) || 0;
+    const foundRoute = routes.find(
+      (route: RouteGeneralInformationInterface) =>
+        route.name === routeName.trim() &&
+        route.cragName === cragName.trim() &&
+        route.areaName === areaName.trim(),
+    );
     const foundFormat =
       formatsData.data.formats.find(
         (format: FormatInterface) => newAscent.format === format.format,
@@ -132,6 +134,7 @@ export default function AddAscentModal({
       gradesData.data.grades.find(
         (grade: GradeInterface) => newAscent.grade === grade.grade,
       ) || 0;
+    if (!foundRoute || !foundFormat || !foundStyle || !foundGrade) return;
     const mutationObject: CreateAscentInterface = {
       userId,
       routeId: foundRoute.id,
@@ -162,7 +165,7 @@ export default function AddAscentModal({
         <DynamicInput
           label="Route"
           placeholder="input route..."
-          data={routesData.data.routes.map((route: any) => {
+          data={routes.map((route: RouteGeneralInformationInterface) => {
             return route.name + ', ' + route.cragName + ', ' + route.areaName;
           })}
           value={newAscent.route}

@@ -1,9 +1,9 @@
-import type { RouteCardInterface } from '../interfaces/RouteCardInterface';
+import type { RouteGeneralInformationInterface } from '../interfaces/RoutesInterface';
 import { CardButton } from './CardButton';
 import { RouteCardInfo } from './RouteCardInfo';
 
 interface RouteCardProps {
-  route: RouteCardInterface;
+  route: RouteGeneralInformationInterface;
 }
 
 function RouteCard({ route }: RouteCardProps) {

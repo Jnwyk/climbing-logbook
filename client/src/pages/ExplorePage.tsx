@@ -18,7 +18,10 @@ function ExplorePage() {
   const { isPending, isError, data } = useQuery({
     queryKey: ['routes'],
     queryFn: route,
-    select: (data) => filterRoutes(data, filters),
+    select: (data) => ({
+      ...data,
+      routes: filterRoutes(data.routes, filters),
+    }),
   });
 
   if (isPending) return <div>Loading</div>;

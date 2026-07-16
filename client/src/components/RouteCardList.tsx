@@ -1,18 +1,15 @@
-import type { RouteCardInterface } from '../interfaces/RouteCardInterface';
+import type { RouteGeneralInformationInterface } from '../interfaces/RoutesInterface';
 import RouteCard from './RouteCard';
 
 interface RouteCardListProps {
-  routes: RouteCardInterface[];
+  routes: RouteGeneralInformationInterface[];
 }
 
 export function RouteCardList({ routes }: RouteCardListProps) {
   return (
     <div>
-      {routes.map((route: RouteCardInterface) => (
-        <RouteCard
-          key={`${route.name}-${route.crag}-${route.area}`}
-          route={route}
-        />
+      {routes.map((route: RouteGeneralInformationInterface) => (
+        <RouteCard key={route.id} route={route} />
       ))}
     </div>
   );
