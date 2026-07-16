@@ -1,4 +1,4 @@
-import RouteStyleIcon from './RouteStyleIcon';
+import RouteStyleIcon from '../RouteStyleIcon';
 
 function StyleButton({
   style,

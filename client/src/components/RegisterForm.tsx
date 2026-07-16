@@ -1,7 +1,7 @@
 import { useContext, useState, type ChangeEvent } from 'react';
 import type { RegisterInterface } from '../interfaces/LoginRegisterInterface';
 import InputWithLabel from './inputs/InputWithLabel';
-import SubmitButton from './SubmitButton';
+import SubmitButton from './buttons/SubmitButton';
 import { useRegister } from '../hooks/useRegister';
 import { AuthContext } from '../context/AuthProvider';
 

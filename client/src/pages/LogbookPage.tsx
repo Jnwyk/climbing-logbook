@@ -9,7 +9,7 @@ import type {
 } from '../interfaces/AscentsInterface';
 import filterAscents from '../utils/filterAscents';
 import AddAscentModal from '../components/modals/AddAscentModal';
-import FlipButton from '../components/FlipButton';
+import FlipButton from '../components/buttons/FlipButton';
 
 function LogbookPage() {
   const modalRef = useRef<HTMLDialogElement>(null);

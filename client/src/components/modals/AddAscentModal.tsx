@@ -3,12 +3,12 @@ import { useMutation, useQueries } from '@tanstack/react-query';
 import { getGrades, getFormats, getStyles } from '../../api/dictionaries';
 import Modal from './Modal';
 import { DynamicInput } from '../inputs/DynamicInput';
-import StyleButton from '../StyleButton';
+import StyleButton from '../buttons/StyleButton';
 import TextArea from '../inputs/TextArea';
 import CheckboxInput from '../inputs/CheckboxInput';
 import StarRateInput from '../inputs/StarRateInput';
 import { route } from '../../api/routes';
-import PrimaryButton from '../PrimaryButton';
+import PrimaryButton from '../buttons/PrimaryButton';
 import { createAscent } from '../../api/ascents';
 import type { CreateAscentInterface } from '../../interfaces/AscentsInterface';
 import type {

@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { route } from '../api/routes';
 import { RouteCardList } from '../components/RouteCardList';
 import SearchCard from '../components/SearchCard';
-import PrimaryButton from '../components/PrimaryButton';
+import PrimaryButton from '../components/buttons/PrimaryButton';
 import { AddNewRouteModal } from '../components/modals/AddNewRouteModal';
 import type { RouteCardsFilterInterface } from '../interfaces/RouteCardsFilterInterface';
 import filterRoutes from '../utils/filterRoutes';
