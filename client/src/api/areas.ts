@@ -1,9 +1,10 @@
 import { handleResponse } from './handleResponse';
-
-const token: string | null = window.localStorage.getItem('token');
+import getApiUrl from '../utils/getApiUrl';
 
 export const areas = async () => {
-  const response = await fetch('http://localhost:8000/area', {
+  const token = window.localStorage.getItem('token');
+
+  const response = await fetch(`${getApiUrl()}/area`, {
     headers: { Authorization: `Bearer ${token}` },
   });
   return await handleResponse(response);

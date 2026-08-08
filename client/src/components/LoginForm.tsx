@@ -4,6 +4,7 @@ import InputWithLabel from './inputs/InputWithLabel';
 import SubmitButton from './buttons/SubmitButton';
 import { useLogin } from '../hooks/useLogin';
 import { AuthContext } from '../context/AuthProvider';
+import { useNavigate } from 'react-router';
 
 const defaultLoginForm: LoginInterface = {
   email: '',
@@ -14,6 +15,7 @@ export function LoginForm() {
   const { login } = useContext(AuthContext);
   const [loginForm, setLoginForm] = useState<LoginInterface>(defaultLoginForm);
   const mutation = useLogin();
+  const navigate = useNavigate();
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (mutation.isError) {
@@ -28,6 +30,7 @@ export function LoginForm() {
     try {
       const { user, token } = await mutation.mutateAsync(loginForm);
       login({ id: user.id, username: user.username, token });
+      navigate('/logbook');
     } catch {}
   };
 

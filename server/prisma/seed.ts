@@ -2,6 +2,15 @@ import prisma from "../prismaClient";
 import * as bcrypt from "bcrypt";
 
 async function main() {
+  const existingSeedAdmin = await prisma.user.findUnique({
+    where: { email: "admin@climblog.app" },
+  });
+
+  if (existingSeedAdmin) {
+    console.log("Seed data already exists. Skipping seed.");
+    return;
+  }
+
   // ─── FORMATS ─────────────────────────────────────────────────────────────
   await prisma.format.createMany({
     data: [

@@ -10,6 +10,7 @@ import type {
 import filterAscents from '../utils/filterAscents';
 import AddAscentModal from '../components/modals/AddAscentModal';
 import FlipButton from '../components/buttons/FlipButton';
+import { Navigate } from 'react-router';
 
 function LogbookPage() {
   const modalRef = useRef<HTMLDialogElement>(null);
@@ -34,7 +35,7 @@ function LogbookPage() {
   }, [data, activeFilters]);
 
   if (isPending) return <p>Loading</p>;
-  if (isError) navigation.navigate('/home');
+  if (isError) return <Navigate to="/home" replace />;
   return (
     <main className="p-6 pt-8 flex items-start gap-6">
       <Table
