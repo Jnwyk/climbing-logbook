@@ -1,28 +1,24 @@
 import { handleResponse } from './handleResponse';
-import getApiUrl from '../utils/getApiUrl';
+import { API_URL } from '../config';
+
+const token: string | null = window.localStorage.getItem('token');
 
 export const getGrades = async () => {
-  const token = window.localStorage.getItem('token');
-
-  const response = await fetch(`${getApiUrl()}/dictionary/grade`, {
+  const response = await fetch(`${API_URL}/dictionary/grade`, {
     headers: { Authorization: `Bearer ${token}` },
   });
   return await handleResponse(response);
 };
 
 export const getFormats = async () => {
-  const token = window.localStorage.getItem('token');
-
-  const response = await fetch(`${getApiUrl()}/dictionary/format`, {
+  const response = await fetch(`${API_URL}/dictionary/format`, {
     headers: { Authorization: `Bearer ${token}` },
   });
   return await handleResponse(response);
 };
 
 export const getStyles = async () => {
-  const token = window.localStorage.getItem('token');
-
-  const response = await fetch(`${getApiUrl()}/dictionary/style`, {
+  const response = await fetch(`${API_URL}/dictionary/style`, {
     headers: { Authorization: `Bearer ${token}` },
   });
   return await handleResponse(response);

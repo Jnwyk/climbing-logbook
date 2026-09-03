@@ -1,10 +1,10 @@
 import { handleResponse } from './handleResponse';
-import getApiUrl from '../utils/getApiUrl';
+import { API_URL } from '../config';
+
+const token: string | null = window.localStorage.getItem('token');
 
 export const crags = async () => {
-  const token = window.localStorage.getItem('token');
-
-  const response = await fetch(`${getApiUrl()}/crag`, {
+  const response = await fetch(`${API_URL}/crag`, {
     headers: { Authorization: `Bearer ${token}` },
   });
   return await handleResponse(response);
