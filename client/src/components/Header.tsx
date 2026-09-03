@@ -2,7 +2,9 @@ import HeaderButton from './HeaderButton';
 import NavigationBar from './NavigationBar';
 import Logo from './Logo';
 import type { NavigationItemInterface } from '../interfaces/NavigationItemInterface';
+import { useContext } from 'react';
 import { useNavigate } from 'react-router';
+import { AuthContext } from '../context/AuthProvider';
 import { HeaderUserInfo } from './HeaderUserInfo';
 
 const HEADER_NAVIGATION: NavigationItemInterface[] = [
@@ -12,7 +14,7 @@ const HEADER_NAVIGATION: NavigationItemInterface[] = [
 
 function Header() {
   const navigate = useNavigate();
-  const user = localStorage.getItem('username');
+  const { user } = useContext(AuthContext);
 
   return (
     <header className="flex justify-between border-b border-stone-800 bg-background-dark/80 px-4 lg:px-20 py-4">
@@ -21,8 +23,8 @@ function Header() {
         <NavigationBar navigationItems={HEADER_NAVIGATION} />
       </div>
       <div className="flex gap-4">
-        {user ? (
-          <HeaderUserInfo user={user} />
+        {user?.username ? (
+          <HeaderUserInfo user={user.username} />
         ) : (
           <>
             <HeaderButton
