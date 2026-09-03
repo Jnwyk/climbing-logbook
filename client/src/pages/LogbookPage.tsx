@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import Table from '../components/tables/Table';
 import { ascents } from '../api/ascents';
 import AscentSearchCard from '../components/AscentSearchCard';
-import { useMemo, useRef, useState } from 'react';
+import { useContext, useMemo, useRef, useState } from 'react';
 import type {
   AscentTableInterface,
   FilterAscentsInterface,
@@ -11,8 +11,10 @@ import filterAscents from '../utils/filterAscents';
 import AddAscentModal from '../components/modals/AddAscentModal';
 import FlipButton from '../components/buttons/FlipButton';
 import { Navigate } from 'react-router';
+import { AuthContext } from '../context/AuthProvider';
 
 function LogbookPage() {
+  const { user } = useContext(AuthContext);
   const modalRef = useRef<HTMLDialogElement>(null);
   const [activeFilters, setActiveFilters] = useState<FilterAscentsInterface>({
     route: '',
@@ -25,6 +27,7 @@ function LogbookPage() {
   const { isPending, isError, data } = useQuery({
     queryKey: ['ascents'],
     queryFn: ascents,
+    enabled: Boolean(user),
   });
 
   const filteredData = useMemo(() => {
@@ -34,8 +37,11 @@ function LogbookPage() {
     });
   }, [data, activeFilters]);
 
+  if (!user) {
+    return <Navigate to="/home" replace state={{ type: 'REGISTER' }} />;
+  }
   if (isPending) return <p>Loading</p>;
-  if (isError) return <Navigate to="/home" replace />;
+  if (isError) return <p>An error has occured</p>;
   return (
     <main className="p-6 pt-8 flex items-start gap-6">
       <Table
